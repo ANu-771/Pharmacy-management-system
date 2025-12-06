@@ -2,22 +2,23 @@ package lk.ijse.pharmacy.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lk.ijse.pharmacy.App;
 
 public class LayoutController {
+
+    @FXML private StackPane contentArea;
 
     @FXML
     public void initialize() {
 
     }
 
+    @FXML
     private void loadDashboard(){
         try {
-            Stage stage = new Stage();
-            stage.setTitle("Dashboard");
-            stage.setResizable(true);
-            Scene scene = new Scene(App.loadFXML("dashboard"),1280,720);
+            contentArea.getChildren().setAll(App.loadFXML("dashboard"));
         }catch (Exception e){
             e.printStackTrace();
         }
