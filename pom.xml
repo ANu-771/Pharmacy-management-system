@@ -5,15 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>lk.ijse</groupId>
-    <artifactId>pharmacy2</artifactId>
+    <artifactId>pharmacy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>pharmacy2</name>
-
+    <name>pharmacy</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.12.1</junit.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -42,6 +40,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.5.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -64,7 +67,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>lk.ijse.pharmacy2/lk.ijse.pharmacy2.HelloApplication</mainClass>
+                            <mainClass>lk.ijse.pharmacy/lk.ijse.pharmacy.App</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
