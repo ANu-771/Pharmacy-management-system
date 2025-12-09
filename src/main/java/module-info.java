@@ -5,6 +5,7 @@ module lk.ijse.pharmacy {
 
     requires org.controlsfx.controls;
     requires java.sql;
+    requires java.desktop;
 
 
     opens lk.ijse.pharmacy to javafx.fxml;

@@ -18,6 +18,7 @@ public class LayoutController {
     @FXML
     private void loadDashboard(){
         try {
+            contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("dashboard"));
         }catch (Exception e){
             e.printStackTrace();
