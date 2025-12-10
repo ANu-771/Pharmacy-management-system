@@ -33,7 +33,7 @@
                             <Image url="@../image/order.png" />
                         </image>
                     </ImageView>
-                    <Label text="Order Management" textFill="#1e293b">
+                    <Label text="Order Manage" textFill="#1e293b">
                         <font>
                             <Font name="System Bold" size="24.0" />
                         </font>
@@ -100,10 +100,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <Label text="Item Code">
+                            <Label text="Medicine ID">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <ComboBox fx:id="cmbItemCode" maxWidth="1.7976931348623157E308" onAction="#cmbItemOnAction" promptText="Select Item" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.rowIndex="1" />
+                            <ComboBox fx:id="cmbMedicineId" maxWidth="1.7976931348623157E308" onAction="#cmbMedicineOnAction" promptText="Select Medicine" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.rowIndex="1" />
 
                             <Label text="Description" GridPane.columnIndex="1">
                                 <font><Font name="System Bold" size="14.0" /></font>
@@ -136,11 +136,16 @@
 
             <TableView fx:id="tblOrderCart" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colItemCode" prefWidth="120.0" text="Item Code" />
+                    <TableColumn fx:id="colMedicineId" prefWidth="120.0" text="Medicine ID" />
+
                     <TableColumn fx:id="colDescription" prefWidth="300.0" text="Description" />
+
                     <TableColumn fx:id="colQty" prefWidth="100.0" text="Qty" />
+
                     <TableColumn fx:id="colUnitPrice" prefWidth="150.0" text="Unit Price" />
-                    <TableColumn fx:id="colTotal" prefWidth="150.0" text="Total" />
+
+                    <TableColumn fx:id="colLineTotal" prefWidth="150.0" text="Line Total" />
+
                     <TableColumn fx:id="colAction" prefWidth="120.0" text="Action" />
                 </columns>
                 <columnResizePolicy>

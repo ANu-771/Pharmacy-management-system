@@ -14,4 +14,8 @@ public class OrderController {
 
     public void cmbCustomerOnAction( ) {
     }
+
+    public void cmbMedicineOnAction(ActionEvent actionEvent) {
+
+    }
 }
