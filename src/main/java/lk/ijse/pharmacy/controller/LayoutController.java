@@ -25,4 +25,15 @@ public class LayoutController {
         }
 
     }
+
+    @FXML
+    private void loadCustomer(){
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("customer"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 }

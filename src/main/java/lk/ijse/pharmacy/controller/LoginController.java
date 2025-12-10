@@ -4,10 +4,19 @@
  */
 package lk.ijse.pharmacy.controller;
 
+import javafx.event.ActionEvent;
+
 /**
  *
  * @author MSI
  */
 public class LoginController {
-    
+
+    public void linkForgotPasswordOnAction() {
+
+    }
+
+    public void btnLoginOnAction() {
+
+    }
 }

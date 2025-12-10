@@ -32,7 +32,7 @@
                 <font><Font size="14.0" /></font>
             </Button>
 
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="40.0" style="-fx-alignment: CENTER_LEFT; -fx-background-color: transparent;" text="Customers" textFill="#334155">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadCustomer" prefHeight="40.0" style="-fx-alignment: CENTER_LEFT; -fx-background-color: transparent; -fx-border-color: #cbd5e1; -fx-border-radius: 5; -fx-background-radius: 5;" text="Customers" textFill="#334155">
                 <font><Font size="14.0" /></font>
             </Button>
 
