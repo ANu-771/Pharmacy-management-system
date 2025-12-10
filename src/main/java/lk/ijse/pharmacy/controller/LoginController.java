@@ -12,11 +12,11 @@ import javafx.event.ActionEvent;
  */
 public class LoginController {
 
-    public void linkForgotPasswordOnAction() {
+    public void linkForgotPasswordOnAction(ActionEvent actionEvent) {
 
     }
 
-    public void btnLoginOnAction() {
+    public void btnLoginOnAction(ActionEvent actionEvent) {
 
     }
 }

@@ -23,7 +23,6 @@ public class LayoutController {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -34,6 +33,45 @@ public class LayoutController {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    private void loadMedicine(){
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("medicine"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void loadSupplier(){
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("supplier"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void loadOrder(){
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("order"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void loadReport(){
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("report"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
