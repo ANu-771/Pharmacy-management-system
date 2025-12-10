@@ -9,9 +9,6 @@ public class OrderController {
     public void btnAddToCartOnAction( ) {
     }
 
-    public void cmbItemOnAction( ) {
-    }
-
     public void cmbCustomerOnAction( ) {
     }
 
