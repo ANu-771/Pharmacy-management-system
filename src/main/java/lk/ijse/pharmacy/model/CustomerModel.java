@@ -13,7 +13,7 @@ import java.util.List;
 public class CustomerModel {
 
     // SAVE Customer
-    public static boolean save(CustomerDTO customer) throws SQLException, ClassNotFoundException {
+    public boolean save(CustomerDTO customer) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 
         String sql = "INSERT INTO customer (name, contact, address) VALUES (?,?,?)";
@@ -28,7 +28,7 @@ public class CustomerModel {
     }
 
     // UPDATE Customer
-    public static boolean update(CustomerDTO customer) throws SQLException, ClassNotFoundException {
+    public boolean update(CustomerDTO customer) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 
         String sql = "UPDATE customer SET name = ?, contact = ?, address = ? WHERE customer_id = ?";
@@ -46,7 +46,7 @@ public class CustomerModel {
     }
 
     // DELETE Customer
-    public static boolean delete(int id) throws SQLException, ClassNotFoundException {
+    public boolean delete(int id) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 
         String sql = "DELETE FROM customer WHERE customer_id = ?";
@@ -61,41 +61,46 @@ public class CustomerModel {
     }
 
     // GET ALL Customers TableView
-    public static List<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
+    public List<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM customer";
 
         Connection conn = DBConnection.getInstance().getConnection();
-        ResultSet resultSet = conn.createStatement().executeQuery(sql);
-
         List<CustomerDTO> list = new ArrayList<>();
-        while (resultSet.next()) {
-            list.add(new CustomerDTO(
-                    resultSet.getInt("customer_id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("contact"),
-                    resultSet.getString("address")
-            ));
+
+        try(ResultSet resultSet = conn.createStatement().executeQuery(sql);){
+
+            while (resultSet.next()) {
+                list.add(new CustomerDTO(
+                        resultSet.getInt("customer_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("contact"),
+                        resultSet.getString("address")
+                ));
+            }
         }
+
         return list;
     }
 
     // SEARCH Customer
-    public static CustomerDTO search(int id) throws SQLException, ClassNotFoundException {
+    public CustomerDTO search(int id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM customer WHERE customer_id = ?";
 
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, id);
+        try(PreparedStatement pstm = conn.prepareStatement(sql)){
+            pstm.setInt(1, id);
 
-        ResultSet resultSet = pstm.executeQuery();
-        if (resultSet.next()) {
-            return new CustomerDTO(
-                    resultSet.getInt("customer_id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("contact"),
-                    resultSet.getString("address")
-            );
+            ResultSet resultSet = pstm.executeQuery();
+            if (resultSet.next()) {
+                return new CustomerDTO(
+                        resultSet.getInt("customer_id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("contact"),
+                        resultSet.getString("address")
+                );
+            }
         }
+
         return null;
     }
 }

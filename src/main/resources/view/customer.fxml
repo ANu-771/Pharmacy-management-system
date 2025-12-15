@@ -75,7 +75,7 @@
                            <TextField fx:id="txtName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="794.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                            <TextField fx:id="txtContact" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
                            <TextField fx:id="txtAddress" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                           <TextField fx:id="txtId" promptText="Enter ID to Search" GridPane.columnIndex="1" />
+                           <TextField fx:id="txtId" onKeyPressed="#handlePressEnter" promptText="Enter ID to Search" GridPane.columnIndex="1" />
                            <Label text="Customer ID">
                               <font>
                                  <Font size="14.0" />

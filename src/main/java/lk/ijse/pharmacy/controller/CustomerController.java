@@ -1,13 +1,18 @@
 package lk.ijse.pharmacy.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.dto.CustomerDTO;
 import lk.ijse.pharmacy.model.CustomerModel;
 
+import java.io.IOException;
 import java.sql.*;
 
 
@@ -32,27 +37,65 @@ public class CustomerController {
     private Button btnReset;
 
     @FXML
-    private TableView tblCustomer;
+    private TableView<CustomerDTO> tblCustomer;
     @FXML
-    private TableColumn colId;
+    private TableColumn<CustomerDTO,Integer> colId;
     @FXML
-    private TableColumn colName;
+    private TableColumn<CustomerDTO,String> colName;
     @FXML
-    private TableColumn colContact;
+    private TableColumn<CustomerDTO,String> colContact;
     @FXML
-    private TableColumn colAddress;
+    private TableColumn<CustomerDTO,String> colAddress;
+
+    CustomerModel customerModel = new CustomerModel();
+    ObservableList<CustomerDTO> customerList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        System.out.println("Customer FXML is loaded!");
-            // Initialize Table Columns
-            colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
-            colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 
-            // Load data into table
-            loadAllCustomers();
+
+        loadAllCustomers();
+
+
+        tblCustomer.setItems(customerList);
+        colId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+            populateFields(newValue);
+        });
+
+
+
+    }
+
+    @FXML
+    private void handlePressEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            String id = txtId.getText() == null ? "" : txtId.getText().trim();
+
+            if (!id.matches("^\\d+$")) {
+                new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+                return;
+            }
+
+            CustomerDTO customerDTO;
+            try {
+                customerDTO = customerModel.search(Integer.parseInt(id));
+                if (customerDTO == null) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer Not Found");
+                    alert.showAndWait();
+                    return;
+                }
+                populateFields(customerDTO);
+
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer Not Found");
+                alert.showAndWait();
+            }
+        }
 
     }
 
@@ -60,7 +103,7 @@ public class CustomerController {
     private void btnSaveOnAction(ActionEvent event) {
         int id = 0;
         String name = txtName.getText() == null ? "" : txtName.getText().trim();
-        String contact = txtContact.getText()  == null ? "" : txtContact.getText().trim();
+        String contact = txtContact.getText() == null ? "" : txtContact.getText().trim();
         String address = txtAddress.getText() == null ? "" : txtAddress.getText().trim();
 
 
@@ -68,14 +111,14 @@ public class CustomerController {
 //            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Please fill all the fields");
 //            return;
 //        }
-        if(!validateCustomerInput(name, contact, address)){
+        if (!validateCustomerInput(name, contact, address)) {
             return;
         }
 
         CustomerDTO customer = new CustomerDTO(id, name, contact, address);
 
         try {
-            boolean isSaved = CustomerModel.save(customer);
+            boolean isSaved = customerModel.save(customer);
             if (isSaved) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Saved Successfully!").show();
                 loadAllCustomers(); // Refresh Table
@@ -94,9 +137,13 @@ public class CustomerController {
             new Alert(Alert.AlertType.WARNING, "Please enter an ID to delete").show();
             return;
         }
+        if (!id.matches("^\\d+$")) {
+            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+            return;
+        }
 
         try {
-            boolean isDeleted = CustomerModel.delete(Integer.parseInt(id));
+            boolean isDeleted = customerModel.delete(Integer.parseInt(id));
             if (isDeleted) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Deleted Successfully!").show();
                 loadAllCustomers();
@@ -111,15 +158,24 @@ public class CustomerController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        int id = Integer.parseInt(txtId.getText());
+        String id = txtId.getText() == null ? "" : txtId.getText().trim();
         String name = txtName.getText();
         String contact = txtContact.getText();
         String address = txtAddress.getText();
 
-        CustomerDTO customer = new CustomerDTO(id, name, contact, address);
+        if (!id.matches("^\\d+$")) {
+            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+            return;
+        }
+
+        if (!validateCustomerInput(name, contact, address)) {
+            return;
+        }
+
+        CustomerDTO customer = new CustomerDTO(Integer.parseInt(id), name, contact, address);
 
         try {
-            boolean isUpdated = CustomerModel.update(customer);
+            boolean isUpdated = customerModel.update(customer);
             if (isUpdated) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Updated Successfully!").show();
                 loadAllCustomers();
@@ -133,7 +189,12 @@ public class CustomerController {
     }
 
     private void loadAllCustomers() {
-
+        try {
+            customerList.clear();
+            customerList.setAll(customerModel.getAll());
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+        }
     }
 
     private boolean validateCustomerInput(String name, String contact, String address) {
@@ -163,6 +224,14 @@ public class CustomerController {
     @FXML
     void btnResetOnAction(ActionEvent event) {
         clearFields();
+    }
+
+    private void populateFields(CustomerDTO customerDTO) {
+        
+        txtId.setText(String.valueOf(customerDTO.getCustomerId()));
+        txtName.setText(customerDTO.getName());
+        txtContact.setText(customerDTO.getContact());
+        txtAddress.setText(customerDTO.getAddress());
     }
 
     private void clearFields() {

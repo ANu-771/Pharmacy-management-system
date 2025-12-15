@@ -56,7 +56,7 @@
                            <Font size="14.0" />
                         </font>
                             </Label>
-                            <TextField fx:id="txtId" promptText="Enter ID to Search" GridPane.columnIndex="1" />
+                            <TextField fx:id="txtId" onKeyPressed="#handlePressEnter" promptText="Enter ID to Search" GridPane.columnIndex="1" />
 
                             <Label text="Name" GridPane.rowIndex="1">
                                 <GridPane.margin><Insets left="30.0" /></GridPane.margin>
@@ -95,7 +95,7 @@
                             <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteOnAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #ef4444;" text="Delete" textFill="WHITE">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Button>
-                            <Button fx:id="btnClear" mnemonicParsing="false" onAction="#btnClearOnAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #94a3b8;" text="Clear" textFill="WHITE">
+                            <Button fx:id="btnClear" mnemonicParsing="false" onAction="#btnResetOnAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #94a3b8;" text="Reset" textFill="WHITE">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Button>
                         </children>
@@ -105,8 +105,8 @@
                         <columns>
                             <TableColumn fx:id="colId" prefWidth="100.0" text="ID" />
                             <TableColumn fx:id="colName" prefWidth="250.0" text="Name" />
-                            <TableColumn fx:id="colContact" prefWidth="150.0" text="Contact" />
-                            <TableColumn fx:id="colEmail" prefWidth="250.0" text="Email" />
+                            <TableColumn fx:id="colEmail" prefWidth="150.0" text="Email" />
+                            <TableColumn fx:id="colContact" prefWidth="250.0" text="Contact" />
                         </columns>
                         <columnResizePolicy>
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
