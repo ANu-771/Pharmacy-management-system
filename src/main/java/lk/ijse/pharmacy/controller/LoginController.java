@@ -43,7 +43,7 @@ public class LoginController {
             alert.show();
         }
     }
-
+    @FXML
     public void linkForgotPasswordOnAction(ActionEvent actionEvent) {
 
     }

@@ -8,9 +8,7 @@ import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.dto.CustomerDTO;
 import lk.ijse.pharmacy.model.CustomerModel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class CustomerController {
@@ -60,10 +58,19 @@ public class CustomerController {
 
     @FXML
     private void btnSaveOnAction(ActionEvent event) {
-        String id = txtId.getText();
-        String name = txtName.getText();
-        String contact = txtContact.getText();
-        String address = txtAddress.getText();
+        int id = 0;
+        String name = txtName.getText() == null ? "" : txtName.getText().trim();
+        String contact = txtContact.getText()  == null ? "" : txtContact.getText().trim();
+        String address = txtAddress.getText() == null ? "" : txtAddress.getText().trim();
+
+
+//        if(name.isEmpty() || contact.isEmpty() || address.isEmpty()){
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Please fill all the fields");
+//            return;
+//        }
+        if(!validateCustomerInput(name, contact, address)){
+            return;
+        }
 
         CustomerDTO customer = new CustomerDTO(id, name, contact, address);
 
@@ -81,7 +88,7 @@ public class CustomerController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtId.getText().trim() == null ? "" : txtId.getText().trim();
 
         if (id.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Please enter an ID to delete").show();
@@ -89,7 +96,7 @@ public class CustomerController {
         }
 
         try {
-            boolean isDeleted = CustomerModel.delete(id);
+            boolean isDeleted = CustomerModel.delete(Integer.parseInt(id));
             if (isDeleted) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Deleted Successfully!").show();
                 loadAllCustomers();
@@ -104,7 +111,7 @@ public class CustomerController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        int id = Integer.parseInt(txtId.getText());
         String name = txtName.getText();
         String contact = txtContact.getText();
         String address = txtAddress.getText();
@@ -127,6 +134,30 @@ public class CustomerController {
 
     private void loadAllCustomers() {
 
+    }
+
+    private boolean validateCustomerInput(String name, String contact, String address) {
+        // 1. Validate Name: Must be MORE than 3 characters (length >= 4)
+        // allowing letters, spaces, and common punctuation like - or '
+        if (!name.matches("[A-Za-z .'-]{3,}")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Name! It must be more than 2 letters.").show();
+            return false;
+        }
+
+        // 2. Validate Contact: Must be exactly 10 digits
+        if (!contact.matches("^\\d{10}$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Contact! Must be exactly 10 numbers.").show();
+            return false;
+        }
+
+        // 3. Validate Address: Must be MORE than 3 characters
+        if (!address.matches("^.{3,}$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Address! Must be more than 2 characters.").show();
+            return false;
+        }
+
+        // If code reaches here, all checks passed
+        return true;
     }
 
     @FXML

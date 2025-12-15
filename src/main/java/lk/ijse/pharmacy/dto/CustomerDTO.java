@@ -2,7 +2,7 @@ package lk.ijse.pharmacy.dto;
 
 public class CustomerDTO {
 
-    private String customerId;
+    private int customerId;
     private String name;
     private String contact;
     private String address;
@@ -11,7 +11,7 @@ public class CustomerDTO {
     public CustomerDTO() {
     }
 
-    public CustomerDTO(String customerId, String name, String contact, String address) {
+    public CustomerDTO(int customerId, String name, String contact, String address) {
         this.customerId = customerId;
         this.name = name;
         this.contact = contact;
@@ -19,11 +19,11 @@ public class CustomerDTO {
     }
 
     // Getters and Setters
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
