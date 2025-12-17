@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CustomerModel {
 
-    // SAVE Customer
+    // SAVE
     public boolean save(CustomerDTO customer) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 
@@ -27,7 +27,7 @@ public class CustomerModel {
 
     }
 
-    // UPDATE Customer
+    // UPDATE
     public boolean update(CustomerDTO customer) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 
@@ -45,7 +45,7 @@ public class CustomerModel {
         return results>0;
     }
 
-    // DELETE Customer
+    // DELETE
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         Connection conn = DBConnection.getInstance().getConnection();
 

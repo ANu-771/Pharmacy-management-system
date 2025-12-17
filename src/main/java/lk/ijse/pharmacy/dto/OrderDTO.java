@@ -4,17 +4,23 @@ import java.util.Date;
 
 public class OrderDTO {
 
-    private String orderId;
-    private String customerId;
-    private String userId;
+    private int orderId;
+    private int customerId;
+    private int userId;
     private double total;
     private Date orderDate;
 
-    // Constructors
     public OrderDTO() {
     }
 
-    public OrderDTO(String orderId, String customerId, String userId, double total, Date orderDate) {
+    public OrderDTO(Integer orderId, String customerId, String userId, double total, Date orderDate) {
+        this.orderId = (orderId == null) ? 0 : orderId;
+        this.customerId = Integer.parseInt(customerId);
+        this.userId = Integer.parseInt(userId);
+        this.total = total;
+        this.orderDate = orderDate;
+    }
+    public OrderDTO(int orderId, int customerId, int userId, double total, Date orderDate) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.userId = userId;
@@ -22,37 +28,28 @@ public class OrderDTO {
         this.orderDate = orderDate;
     }
 
-    // Getters and Setters
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public Date getOrderDate() {
@@ -63,9 +60,22 @@ public class OrderDTO {
         this.orderDate = orderDate;
     }
 
-    @Override
-    public String toString() {
-        return "OrderDTO{" + "orderId=" + orderId + ", customerId=" + customerId + ", userId=" + userId + ", total=" + total + ", orderDate=" + orderDate + '}';
+    public double getTotal() {
+        return total;
     }
 
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDTO{" +
+                "orderId=" + orderId +
+                ", customerId=" + customerId +
+                ", userId=" + userId +
+                ", total=" + total +
+                ", orderDate=" + orderDate +
+                '}';
+    }
 }

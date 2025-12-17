@@ -4,32 +4,38 @@ import java.util.Date;
 
 public class MedicineDTO {
 
-    private String medicineId;
+    private int medicineId; // Changed to int for Auto-Increment
     private String medName;
     private String brand;
+    private int qtyInStock;
     private double unitPrice;
     private Date expDate;
-    private int qtyInStock;
 
-    // Constructors
     public MedicineDTO() {
     }
 
-    public MedicineDTO(String medicineId, String medName, String brand, double unitPrice, Date expDate, int qtyInStock) {
+    public MedicineDTO(String medName, String brand, int qtyInStock, double unitPrice, Date expDate) {
+        this.medName = medName;
+        this.brand = brand;
+        this.qtyInStock = qtyInStock;
+        this.unitPrice = unitPrice;
+        this.expDate = expDate;
+    }
+
+    public MedicineDTO(int medicineId, String medName, String brand, int qtyInStock, double unitPrice, Date expDate) {
         this.medicineId = medicineId;
         this.medName = medName;
         this.brand = brand;
+        this.qtyInStock = qtyInStock;
         this.unitPrice = unitPrice;
         this.expDate = expDate;
-        this.qtyInStock = qtyInStock;
     }
 
-    // Getters and Setters
-    public String getMedicineId() {
+    public int getMedicineId() {
         return medicineId;
     }
 
-    public void setMedicineId(String medicineId) {
+    public void setMedicineId(int medicineId) {
         this.medicineId = medicineId;
     }
 
@@ -49,6 +55,14 @@ public class MedicineDTO {
         this.brand = brand;
     }
 
+    public int getQtyInStock() {
+        return qtyInStock;
+    }
+
+    public void setQtyInStock(int qtyInStock) {
+        this.qtyInStock = qtyInStock;
+    }
+
     public double getUnitPrice() {
         return unitPrice;
     }
@@ -65,17 +79,15 @@ public class MedicineDTO {
         this.expDate = expDate;
     }
 
-    public int getQtyInStock() {
-        return qtyInStock;
-    }
-
-    public void setQtyInStock(int qtyInStock) {
-        this.qtyInStock = qtyInStock;
-    }
-
     @Override
     public String toString() {
-        return "MedicineDTO{" + "medicineId=" + medicineId + ", medName=" + medName + ", brand=" + brand + ", unitPrice=" + unitPrice + ", expDate=" + expDate + ", qtyInStock=" + qtyInStock + '}';
+        return "MedicineDTO{" +
+                "medicineId=" + medicineId +
+                ", medName='" + medName + '\'' +
+                ", brand='" + brand + '\'' +
+                ", qtyInStock=" + qtyInStock +
+                ", unitPrice=" + unitPrice +
+                ", expDate=" + expDate +
+                '}';
     }
-
 }

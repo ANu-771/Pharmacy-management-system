@@ -14,5 +14,7 @@ module lk.ijse.pharmacy {
     exports lk.ijse.pharmacy.controller;
     opens lk.ijse.pharmacy.dto to java.base;
     exports lk.ijse.pharmacy.dto;
+    opens lk.ijse.pharmacy.dto.tm to javafx.base;
+    exports lk.ijse.pharmacy.dto.tm;
 
 }

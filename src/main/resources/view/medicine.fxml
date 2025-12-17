@@ -58,7 +58,7 @@
                                 <font><Font size="14.0" /></font>
                                 <GridPane.margin><Insets left="20.0" /></GridPane.margin>
                             </Label>
-                            <TextField fx:id="txtId" promptText="Enter ID to Search" GridPane.columnIndex="1" />
+                            <TextField fx:id="txtId" onKeyPressed="#handlePressEnter" promptText="Enter ID to Search" GridPane.columnIndex="1" />
 
                             <Label text="Medicine Name" GridPane.rowIndex="1">
                                 <font><Font size="14.0" /></font>
