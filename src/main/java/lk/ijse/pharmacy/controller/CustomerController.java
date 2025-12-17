@@ -107,10 +107,11 @@ public class CustomerController {
         String address = txtAddress.getText() == null ? "" : txtAddress.getText().trim();
 
 
-//        if(name.isEmpty() || contact.isEmpty() || address.isEmpty()){
-//            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Please fill all the fields");
-//            return;
-//        }
+        if(name.isEmpty() || contact.isEmpty() || address.isEmpty()){
+            new Alert(Alert.AlertType.INFORMATION,"Please fill all the fields").show();
+            return;
+        }
+
         if (!validateCustomerInput(name, contact, address)) {
             return;
         }

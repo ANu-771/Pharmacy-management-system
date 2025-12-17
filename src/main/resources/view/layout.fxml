@@ -24,7 +24,7 @@
             <children>
                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../image/heart%20with%20pill.gif" />
+                     <Image url="@../image/heart with pill.gif" />
                   </image>
                </ImageView>
             </children></HBox>
@@ -71,7 +71,7 @@
 
     <bottom>
         <HBox alignment="CENTER" prefHeight="30.0" prefWidth="1280.0" style="-fx-background-color: #e2e8f0;">
-            <Label text="© 2025 Pharmacy Management System | v1.0.0" textFill="#64748b">
+            <Label text="© KK Pharmacy Management System" textFill="#64748b">
                 <font>
                     <Font size="11.0" />
                 </font>

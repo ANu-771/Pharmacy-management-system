@@ -108,12 +108,16 @@ public class SupplierController {
         String contact = txtContact.getText() == null ? "" : txtContact.getText().trim();
         String email = txtEmail.getText() == null ? "" : txtEmail.getText().trim();
 
+        if (name.isEmpty() || contact.isEmpty() || email.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields!").show();
+            return;
+        }
 
         if (!validateSupplierInput(name, contact, email)) {
             return;
         }
 
-        SupplierDTO supplier = new SupplierDTO(id, name, contact, email);
+        SupplierDTO supplier = new SupplierDTO(id, name, email, contact);
 
         try {
             boolean isSaved = supplierModel.save(supplier);
@@ -170,7 +174,7 @@ public class SupplierController {
             return;
         }
 
-        SupplierDTO supplier = new SupplierDTO(Integer.parseInt(id), name, contact, email);
+        SupplierDTO supplier = new SupplierDTO(Integer.parseInt(id), name, email, contact);
 
         try {
             boolean isUpdated = supplierModel.update(supplier);
@@ -210,7 +214,11 @@ public class SupplierController {
         }
 
         // 3. Validate Address: Must be MORE than 3 characters
-        if (!email.matches("^.{3,}$")) {
+        //if (!email.matches("^.{3,}$")) {
+
+
+        if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,10}$")) {
+
             new Alert(Alert.AlertType.ERROR, "Invalid email!").show();
             return false;
         }
