@@ -16,17 +16,32 @@ import java.util.Map;
 
 public class DashboardController {
 
-    @FXML private Label lblTotalMedicines;
-    @FXML private Label lblActiveCustomers;
-    @FXML private Label lblTodayIncome;
+    @FXML
+    private Label lblTotalMedicines;
 
-    @FXML private AreaChart<String, Number> chartSales;
+    @FXML
+    private Label lblActiveCustomers;
 
-    @FXML private TableView<MedicineDTO> tblExpiring;
-    @FXML private TableColumn<MedicineDTO, String> colExpId;
-    @FXML private TableColumn<MedicineDTO, String> colExpName;
-    @FXML private TableColumn<MedicineDTO, String> colExpDate; // Uses toString of Date
-    @FXML private TableColumn<MedicineDTO, Integer> colExpQty;
+    @FXML
+    private Label lblTodayIncome;
+
+    @FXML
+    private AreaChart<String, Number> chartSales;
+
+    @FXML
+    private TableView<MedicineDTO> tblExpiring;
+
+    @FXML
+    private TableColumn<MedicineDTO, String> colExpId;
+
+    @FXML
+    private TableColumn<MedicineDTO, String> colExpName;
+
+    @FXML
+    private TableColumn<MedicineDTO, String> colExpDate;
+
+    @FXML
+    private TableColumn<MedicineDTO, Integer> colExpQty;
 
     private DashboardModel dashboardModel = new DashboardModel();
 
@@ -60,7 +75,6 @@ public class DashboardController {
 
             Map<String, Double> trends = dashboardModel.getIncomeTrends();
 
-            // Add data to series (Looping through Map)
             for (Map.Entry<String, Double> entry : trends.entrySet()) {
                 series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }

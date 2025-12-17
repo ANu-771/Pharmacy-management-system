@@ -81,23 +81,18 @@ public class LayoutController {
         }
     }
 
-    // ///
 
     @FXML
     void handleLogout(ActionEvent event) throws IOException {
-        // 1. Show a confirmation alert
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Logout");
         alert.setHeaderText("You are about to logout!");
         alert.setContentText("Are you sure you want to return to the login screen?");
 
-        // 2. Capture the user's response
         Optional<ButtonType> result = alert.showAndWait();
 
-        // 3. If OK is clicked, go back to login
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Assuming your login fxml is named 'login' or 'Login'
-            // Ensure this matches the string you use to load the login view
             App.setRoot("login");
         }
     }

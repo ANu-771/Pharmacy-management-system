@@ -49,14 +49,13 @@ public class DashboardModel {
         ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(sql);
 
         while (resultSet.next()) {
-            // FIX: Match the DTO Constructor Order: (int, String, String, int, double, Date)
             list.add(new MedicineDTO(
-                    resultSet.getInt("medicine_id"),      // 1. int ID
-                    resultSet.getString("med_name"),      // 2. Name
-                    resultSet.getString("brand"),         // 3. Brand
-                    resultSet.getInt("qty_in_stock"),     // 4. Qty (Swapped to correct place)
-                    resultSet.getDouble("unit_price"),    // 5. Price
-                    resultSet.getDate("exp_date")         // 6. Date
+                    resultSet.getInt("medicine_id"),
+                    resultSet.getString("med_name"),
+                    resultSet.getString("brand"),
+                    resultSet.getInt("qty_in_stock"),
+                    resultSet.getDouble("unit_price"),
+                    resultSet.getDate("exp_date")
             ));
         }
         return list;

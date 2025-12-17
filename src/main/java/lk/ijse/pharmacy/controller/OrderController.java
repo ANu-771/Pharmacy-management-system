@@ -155,6 +155,11 @@ public class OrderController {
     @FXML
     public void cmbMedicineOnAction(ActionEvent actionEvent) {
         String id = cmbMedicineId.getValue();
+
+        if (id == null) {
+            return;
+        }
+
         try {
             MedicineDTO medicine = medicineModel.search(Integer.parseInt(id));
             if (medicine != null) {
@@ -170,41 +175,41 @@ public class OrderController {
 
     @FXML
     public void btnAddToCartOnAction(ActionEvent actionEvent) {
-        // 1. Check if a Medicine is selected
+        // med select chek krnw
         String medId = cmbMedicineId.getValue();
         if (medId == null) {
             new Alert(Alert.AlertType.WARNING, "Please select a medicine first!").show();
             return;
         }
 
-        // 2. Check if Qty is entered
+        // qty enter krnld blnw
         String qtyText = txtQty.getText().trim();
         if (qtyText.isEmpty() || !qtyText.matches("\\d+") || Integer.parseInt(qtyText) <= 0) {
             new Alert(Alert.AlertType.ERROR, "Invalid Quantity! Please enter a valid number.").show();
             return;
         }
 
-        // 3. Parse Data (Safely)
+
         try {
             String desc = lblDescription.getText();
             double unitPrice = Double.parseDouble(lblUnitPrice.getText());
             int qtyOnHand = Integer.parseInt(lblQtyOnHand.getText());
             int qty = Integer.parseInt(qtyText);
 
-            // 4. Check Stock
+            // stock check
             if (qty > qtyOnHand) {
                 new Alert(Alert.AlertType.ERROR, "Out of Stock! You only have " + qtyOnHand + " items.").show();
                 return;
             }
 
-            // 5. Add to Cart Logic
+            // add to my cart
             Button btnRemove = new Button("Remove");
             btnRemove.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-cursor: hand;");
 
-            // Calculate Total
+            // total ek gnnw
             double total = qty * unitPrice;
 
-            // Check if item already exists in cart
+            // item already cart eke tyd blnw
             CartTM existingItem = null;
             for (CartTM tm : cartList) {
                 if (tm.getMedicineId().equals(medId)) {
@@ -214,9 +219,8 @@ public class OrderController {
             }
 
             if (existingItem != null) {
-                // Update existing row
                 int newQty = existingItem.getQty() + qty;
-                if(newQty > qtyOnHand) {
+                if (newQty > qtyOnHand) {
                     new Alert(Alert.AlertType.ERROR, "Not enough stock to add more!").show();
                     return;
                 }
@@ -224,10 +228,8 @@ public class OrderController {
                 existingItem.setTotal(newQty * unitPrice);
                 tblOrderCart.refresh();
             } else {
-                // Add new row
                 CartTM newTm = new CartTM(medId, desc, qty, unitPrice, total, btnRemove);
 
-                // Set Remove Button Action
                 btnRemove.setOnAction((e) -> {
                     cartList.remove(newTm);
                     calculateNetTotal();
@@ -240,11 +242,11 @@ public class OrderController {
             txtQty.clear();
 
         } catch (NumberFormatException e) {
-            // This happens if labels are empty or have invalid text
             new Alert(Alert.AlertType.ERROR, "Error reading medicine data. Please re-select the medicine.").show();
             e.printStackTrace();
         }
     }
+
     private void calculateNetTotal() {
         netTotal = 0;
         for (CartTM tm : cartList) {
@@ -262,12 +264,9 @@ public class OrderController {
             return;
         }
 
-        // Create Order Object
-        // Note: Order ID is auto-generated in DB, pass whatever or null
-        // User ID is hardcoded to "1" or get from login session
+
         OrderDTO order = new OrderDTO(null, customerId, "1", netTotal, new Date());
 
-        // Convert ObservableList to normal List for Model
         List<CartTM> cartData = new ArrayList<>(cartList);
 
         try {
@@ -276,9 +275,8 @@ public class OrderController {
                 new Alert(Alert.AlertType.INFORMATION, "Order Placed Successfully!").show();
                 cartList.clear();
                 calculateNetTotal();
-                loadNextOrderId(); // Refresh ID
+                loadNextOrderId();
 
-                // Refresh Medicine fields as stock has changed
                 cmbMedicineId.getSelectionModel().clearSelection();
                 lblDescription.setText("");
                 lblQtyOnHand.setText("");

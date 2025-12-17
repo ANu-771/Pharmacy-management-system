@@ -12,9 +12,8 @@ import java.util.List;
 
 public class SupplierModel {
 
-    // SAVE Supplier
+
     public boolean save(SupplierDTO supplier) throws SQLException, ClassNotFoundException {
-        // SQL to insert into the 'supplier' table
         String sql = "INSERT INTO supplier (supplier_name, email, contact_num) VALUES (?,?,?)";
 
         Connection conn = DBConnection.getInstance().getConnection();
@@ -28,9 +27,9 @@ public class SupplierModel {
         }
     }
 
-    // UPDATE Supplier
+
     public boolean update(SupplierDTO supplier) throws SQLException, ClassNotFoundException {
-        // SQL to update existing supplier
+
         String sql = "UPDATE supplier SET supplier_name = ?, email = ?, contact_num = ? WHERE supplier_id = ?";
 
         Connection conn = DBConnection.getInstance().getConnection();
@@ -39,13 +38,12 @@ public class SupplierModel {
             pstm.setString(1, supplier.getSupplierName());
             pstm.setString(2, supplier.getEmail());
             pstm.setString(3, supplier.getContactNum());
-            pstm.setInt(4, supplier.getSupplierId()); // Identifies which row to update
+            pstm.setInt(4, supplier.getSupplierId());
 
             return pstm.executeUpdate() > 0;
         }
     }
 
-    // DELETE Supplier
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM supplier WHERE supplier_id = ?";
 
@@ -57,7 +55,6 @@ public class SupplierModel {
         }
     }
 
-    // GET ALL Suppliers (For TableView)
     public List<SupplierDTO> getAll() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM supplier";
 
@@ -77,7 +74,6 @@ public class SupplierModel {
         return list;
     }
 
-    // SEARCH Supplier (Optional, by ID)
     public SupplierDTO search(int id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM supplier WHERE supplier_id = ?";
 
