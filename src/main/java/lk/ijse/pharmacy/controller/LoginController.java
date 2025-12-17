@@ -23,29 +23,6 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-//    @FXML
-//    private void btnLoginOnAction() throws IOException{
-//
-//        String realUsername = "isuru";
-//        String realPassword = "123";
-//
-//        String username = usernameField.getText();
-//        String password = passwordField.getText();
-//
-//        if (username.equals(realUsername) && password.equals(realPassword)) {
-//            System.out.println("Logged - IN Sucessful.!");
-//
-//            App.setRoot("layout");
-//        } else {
-//            System.out.println("Invalid user Name or Password");
-//
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Login message..");
-//            alert.setHeaderText("Invalid user name or password..");
-//            alert.show();
-//        }
-//    }
-
     @FXML
     private void btnLoginOnAction() throws IOException {
         String realUsername = "isuru";
@@ -54,36 +31,29 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // 1. Define your styles
-        // The style for a normal field (matches your FXML)
         String defaultStyle = "-fx-border-color: #e2e8f0; -fx-border-radius: 5; -fx-background-color: #f8fafc;";
-        // The style for an error field (Red border)
+        // Red border
         String errorStyle = "-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 5; -fx-background-color: #fff0f0;";
 
-        // 2. Reset styles (Clear previous errors)
         usernameField.setStyle(defaultStyle);
         passwordField.setStyle(defaultStyle);
 
-        // 3. Validation Logic
         boolean isError = false;
 
-        // Check Username
         if (!username.equals(realUsername)) {
-            usernameField.setStyle(errorStyle); // Turn Username Red
-            usernameField.requestFocus(); // Put cursor back here
-            isError = true;
-        }
-        // Check Password (only checks if username was correct, or you can check both)
-        else if (!password.equals(realPassword)) {
-            passwordField.setStyle(errorStyle); // Turn Password Red
-            passwordField.requestFocus(); // Put cursor back here
+            usernameField.setStyle(errorStyle);
+            usernameField.requestFocus();
             isError = true;
         }
 
-        // 4. Final Decision
+        else if (!password.equals(realPassword)) {
+            passwordField.setStyle(errorStyle);
+            passwordField.requestFocus();
+            isError = true;
+        }
+
         if (isError) {
             System.out.println("Invalid User Name or Password");
-            // No Alert created here, just the red styles above
         } else {
             System.out.println("Logged - IN Successful.!");
             App.setRoot("layout");
