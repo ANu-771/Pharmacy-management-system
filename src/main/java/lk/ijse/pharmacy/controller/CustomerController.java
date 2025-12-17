@@ -199,26 +199,21 @@ public class CustomerController {
     }
 
     private boolean validateCustomerInput(String name, String contact, String address) {
-        // 1. Validate Name: Must be MORE than 3 characters (length >= 4)
-        // allowing letters, spaces, and common punctuation like - or '
         if (!name.matches("[A-Za-z .'-]{3,}")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Name! It must be more than 2 letters.").show();
             return false;
         }
 
-        // 2. Validate Contact: Must be exactly 10 digits
         if (!contact.matches("^\\d{10}$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Contact! Must be exactly 10 numbers.").show();
             return false;
         }
 
-        // 3. Validate Address: Must be MORE than 3 characters
         if (!address.matches("^.{3,}$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Address! Must be more than 2 characters.").show();
             return false;
         }
 
-        // If code reaches here, all checks passed
         return true;
     }
 

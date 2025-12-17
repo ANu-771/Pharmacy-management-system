@@ -200,30 +200,21 @@ public class SupplierController {
     }
 
     private boolean validateSupplierInput(String name, String contact, String email) {
-        // 1. Validate Name: Must be MORE than 3 characters (length >= 4)
-        // allowing letters, spaces, and common punctuation like - or '
         if (!name.matches("[A-Za-z .'-]{3,}")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Name! It must be more than 2 letters.").show();
             return false;
         }
 
-        // 2. Validate Contact: Must be exactly 10 digits
         if (!contact.matches("^\\d{10}$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Contact! Must be exactly 10 numbers.").show();
             return false;
         }
 
-        // 3. Validate Address: Must be MORE than 3 characters
-        //if (!email.matches("^.{3,}$")) {
-
-
         if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,10}$")) {
-
             new Alert(Alert.AlertType.ERROR, "Invalid email!").show();
             return false;
         }
 
-        // If code reaches here, all checks passed
         return true;
     }
 
