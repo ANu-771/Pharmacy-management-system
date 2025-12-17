@@ -32,7 +32,7 @@
                     <Label text="Total Medicines" textFill="#0369a1">
                         <font><Font size="16.0" /></font>
                     </Label>
-                    <Label text="1,240">
+                    <Label fx:id="lblTotalMedicines" text="1,240">
                         <font><Font name="System Bold" size="32.0" /></font>
                     </Label>
                     <Label text="+5 New Items" textFill="#0284c7">
@@ -44,7 +44,7 @@
                     <Label text="Active Customers" textFill="#15803d">
                         <font><Font size="16.0" /></font>
                     </Label>
-                    <Label text="85">
+                    <Label fx:id="lblActiveCustomers" text="85">
                         <font><Font name="System Bold" size="32.0" /></font>
                     </Label>
                     <Label text="+2 Today" textFill="#16a34a">
@@ -56,7 +56,7 @@
                     <Label text="Today's Income" textFill="#b45309">
                         <font><Font size="16.0" /></font>
                     </Label>
-                    <Label text="Rs. 45k">
+                    <Label fx:id="lblTodayIncome" text="Rs. 45k">
                         <font><Font name="System Bold" size="32.0" /></font>
                     </Label>
                     <Label text="Target: 50k" textFill="#d97706">
