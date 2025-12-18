@@ -20,14 +20,15 @@
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
-         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-            <children>
-               <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../image/heart with pill.gif" />
-                  </image>
-               </ImageView>
-            </children></HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <children>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../image/heart with pill.gif" />
+                        </image>
+                    </ImageView>
+                </children>
+            </HBox>
 
             <Label text="MAIN MENU" textFill="#64748b">
                 <font>
@@ -61,11 +62,13 @@
                 <font><Font size="14.0" /></font>
             </Button>
 
-            <Region VBox.vgrow="ALWAYS" /> <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLogout" prefHeight="40.0" style="-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 5;" text="Logout">
-            <font>
-                <Font name="System Bold" size="14.0" />
-            </font>
-        </Button>
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLogout" prefHeight="40.0" style="-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 5;" text="Logout">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
         </VBox>
     </left>
 
@@ -78,8 +81,33 @@
             </Label>
         </HBox>
     </bottom>
-   <center>
-      <StackPane fx:id="contentArea" BorderPane.alignment="CENTER" />
-   </center>
+
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+            <children>
+                <VBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../image/medicine.png" />
+                            </image>
+                        </ImageView>
+
+                        <Label text="KK Pharmacy" textFill="#0369a1">
+                            <font>
+                                <Font name="System Bold" size="48.0" />
+                            </font>
+                        </Label>
+
+                        <Label text="&quot;Empowering Health, Enriching Lives&quot;" textFill="#64748b">
+                            <font>
+                                <Font name="System Italic" size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
 
 </BorderPane>
