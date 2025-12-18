@@ -18,7 +18,7 @@ public class LayoutController {
 
     @FXML
     public void initialize() {
-
+       // loadDashboard();
     }
 
     @FXML

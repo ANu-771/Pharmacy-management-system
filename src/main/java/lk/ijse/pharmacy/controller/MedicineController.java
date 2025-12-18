@@ -46,7 +46,9 @@ public class MedicineController {
     private TableView<MedicineDTO> tblMedicine;
 
     @FXML
-    private TextField txtBrand, txtId, txtName, txtPrice, txtQty;
+    private TextField txtBrand, txtId,txtName, txtPrice, txtQty;
+
+
 
     private MedicineModel medicineModel = new MedicineModel();
     private ObservableList<MedicineDTO> medicineList = FXCollections.observableArrayList();
