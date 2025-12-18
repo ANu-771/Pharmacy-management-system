@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -14,15 +15,55 @@ import java.util.Optional;
 
 public class LayoutController {
 
-    @FXML private StackPane contentArea;
+    @FXML
+    private StackPane contentArea;
+
+
+    @FXML
+    private Button btnCustomer;
+
+    @FXML
+    private Button btnDashboard;
+
+    @FXML
+    private Button btnMedicine;
+
+    @FXML
+    private Button btnOrder;
+
+    @FXML
+    private Button btnReport;
+
+    @FXML
+    private Button btnSupplier;
 
     @FXML
     public void initialize() {
        // loadDashboard();
     }
 
+    // 2. Helper Method to Handle Highlighting
+    private void setButtonActive(Button activeButton) {
+        // Reset all buttons to default style
+        Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnOrder, btnReport};
+
+        for (Button btn : buttons) {
+            // Remove the active class if it exists
+            btn.getStyleClass().remove("nav-btn-active");
+            // Ensure the normal class is there
+            if (!btn.getStyleClass().contains("nav-btn")) {
+                btn.getStyleClass().add("nav-btn");
+            }
+        }
+
+        // Add the active style to the clicked button
+        activeButton.getStyleClass().add("nav-btn-active");
+    }
+
     @FXML
     private void loadDashboard(){
+        setButtonActive(btnDashboard);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("dashboard"));
@@ -33,6 +74,8 @@ public class LayoutController {
 
     @FXML
     private void loadCustomer(){
+        setButtonActive(btnCustomer);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("customer"));
@@ -43,6 +86,8 @@ public class LayoutController {
 
     @FXML
     private void loadMedicine(){
+        setButtonActive(btnMedicine);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("medicine"));
@@ -53,6 +98,8 @@ public class LayoutController {
 
     @FXML
     private void loadSupplier(){
+        setButtonActive(btnSupplier);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("supplier"));
@@ -63,6 +110,8 @@ public class LayoutController {
 
     @FXML
     private void loadOrder(){
+        setButtonActive(btnOrder);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("order"));
@@ -73,6 +122,8 @@ public class LayoutController {
 
     @FXML
     private void loadReport(){
+        setButtonActive(btnReport);
+
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("report"));

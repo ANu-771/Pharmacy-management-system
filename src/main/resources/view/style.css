@@ -1,0 +1,78 @@
+/* 1. Navigation Buttons (Dashboard, Medicine, etc.) */
+.nav-btn {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #334155;
+    -fx-font-size: 14px;
+}
+
+/* When Mouse Hovers Over Button */
+.nav-btn:hover {
+    -fx-background-color: #eff6ff; /* Light Blue tint */
+    -fx-border-color: #3b82f6;     /* Blue Border */
+    -fx-text-fill: #3b82f6;        /* Blue Text */
+    -fx-cursor: hand;
+}
+
+/* When Button is Pressed */
+.nav-btn:pressed {
+    -fx-background-color: #3b82f6; /* Solid Blue */
+    -fx-text-fill: white;          /* White Text */
+    -fx-border-color: #2563eb;
+}
+
+/* 2. Logout Button */
+.logout-btn {
+    -fx-background-color: #ef4444; /* Good Red */
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    /* Add Shade (Drop Shadow) */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.logout-btn:hover {
+    -fx-background-color: #dc2626; /* Darker Red */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 3);
+}
+
+.logout-btn:pressed {
+    -fx-background-color: #b91c1c; /* Even Darker Red */
+    -fx-effect: none; /* Remove shadow to look like it was pushed in */
+}
+
+
+.nav-btn-active {
+    -fx-background-color: #3b82f6; /* Solid Blue Background */
+    -fx-text-fill: white;          /* White Text */
+    -fx-border-color: #2563eb;     /* Darker Blue Border */
+    -fx-font-weight: bold;         /* Bold Text */
+    -fx-effect: dropshadow(three-pass-box, rgba(59, 130, 246, 0.4), 10, 0, 0, 3); /* Blue Glow */
+}
+
+/* Login Button Style */
+.login-btn {
+    -fx-background-color: #3b82f6; /* Normal Blue */
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+/* Hover Effect (Darker Blue + Shadow) */
+.login-btn:hover {
+    -fx-background-color: #2563eb; /* Darker Blue */
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.4), 10, 0, 0, 3); /* Blue Glow */
+}
+
+/* Pressed Effect */
+.login-btn:pressed {
+    -fx-background-color: #1d4ed8; /* Even Darker Blue */
+    -fx-effect: none;
+}

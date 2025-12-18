@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1000.0" style="-fx-background-color: #f1f5f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1000.0" style="-fx-background-color: #f1f5f9;" stylesheets="@../view/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.LoginController">
     <left>
         <VBox alignment="CENTER_LEFT" prefHeight="720.0" prefWidth="450.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom right, #1e3a8a, #3b82f6);">
             <padding>
@@ -97,14 +97,13 @@
                                 <Font size="12.0" />
                             </font>
                         </Hyperlink>
-                        <Button fx:id="btnLogin" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnLoginOnAction" prefHeight="45.0" style="-fx-background-color: #3b82f6; -fx-background-radius: 10; -fx-cursor: hand;" text="Login" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="16.0" />
-                            </font>
+
+                        <Button fx:id="btnLogin" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnLoginOnAction" prefHeight="45.0" styleClass="login-btn" text="Login">
                             <VBox.margin>
                                 <Insets top="15.0" />
                             </VBox.margin>
                         </Button>
+
                     </children>
                 </VBox>
             </children>
