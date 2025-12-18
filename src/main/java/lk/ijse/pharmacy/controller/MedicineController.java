@@ -55,7 +55,7 @@ public class MedicineController {
 
     @FXML
     private void initialize() {
-        txtId.setEditable(false);
+       // txtId.setEditable(false);
         loadAllMedicines();
         setupTable();
         tblMedicine.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
