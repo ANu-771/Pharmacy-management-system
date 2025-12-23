@@ -27,7 +27,7 @@
                 <children>
                     <Label text="Supplier Manage" textFill="#1e293b">
                         <font>
-                            <Font name="System" size="26.0" />
+                            <Font name="System Bold" size="26.0" />
                         </font>
                     </Label>
                 </children>
@@ -54,7 +54,7 @@
                         </rowConstraints>
 
                         <children>
-                            <Label text="Supplier ID / Search">
+                            <Label text="Supplier ID /Search">
                                 <font><Font size="14.0" /></font>
                             </Label>
                             <TextField fx:id="txtId" onKeyPressed="#handlePressEnter" promptText="Enter ID to Search" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;" GridPane.columnIndex="1">

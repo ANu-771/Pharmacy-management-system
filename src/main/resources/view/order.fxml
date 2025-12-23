@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.OrderController">
+<BorderPane prefHeight="720.0" prefWidth="1040.0" stylesheets="@../view/table.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.OrderController">
 
     <center>
         <VBox spacing="20.0" style="-fx-background-color: white;">
@@ -35,7 +35,7 @@
                     </ImageView>
                     <Label text="Order Manage" textFill="#1e293b">
                         <font>
-                            <Font name="System Bold" size="24.0" />
+                            <Font name="System Bold" size="26.0" />
                         </font>
                     </Label>
                 </children>
@@ -43,7 +43,7 @@
 
             <Separator />
 
-            <VBox spacing="15.0" style="-fx-background-color: #f8fafc; -fx-background-radius: 10;" VBox.vgrow="NEVER">
+            <VBox spacing="15.0" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);" VBox.vgrow="NEVER">
                 <padding>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </padding>
@@ -58,29 +58,29 @@
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         </rowConstraints>
 
                         <children>
-                            <Label text="Order ID">
+                            <Label text="Order ID" textFill="#475569">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <TextField fx:id="txtOrderId" editable="false" promptText="Auto Generated" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.rowIndex="1" />
+                            <TextField fx:id="txtOrderId" editable="false" promptText="Auto Generated" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;" GridPane.rowIndex="1" />
 
-                            <Label text="Order Date" GridPane.columnIndex="1">
+                            <Label text="Order Date" textFill="#475569" GridPane.columnIndex="1">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblOrderDate" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-border-color: #e2e8f0; -fx-background-color: white; -fx-padding: 0 0 0 10;" text="2024-01-01" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label fx:id="lblOrderDate" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" text="2024-01-01" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                            <Label text="Customer ID" GridPane.columnIndex="2">
+                            <Label text="Customer ID" textFill="#475569" GridPane.columnIndex="2">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <ComboBox fx:id="cmbCustomerId" maxWidth="1.7976931348623157E308" onAction="#cmbCustomerOnAction" promptText="Select Customer" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                            <ComboBox fx:id="cmbCustomerId" maxWidth="1.7976931348623157E308" onAction="#cmbCustomerOnAction" prefHeight="35.0" promptText="Select Customer" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 2;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
-                            <Label text="Customer Name" GridPane.columnIndex="3">
+                            <Label text="Customer Name" textFill="#475569" GridPane.columnIndex="3">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblCustomerName" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-border-color: #e2e8f0; -fx-background-color: white; -fx-padding: 0 0 0 10;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                            <Label fx:id="lblCustomerName" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         </children>
                     </GridPane>
 
@@ -97,35 +97,35 @@
                         </columnConstraints>
                         <rowConstraints>
                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <Label text="Medicine ID">
+                            <Label text="Medicine ID" textFill="#475569">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <ComboBox fx:id="cmbMedicineId" maxWidth="1.7976931348623157E308" onAction="#cmbMedicineOnAction" promptText="Select Medicine" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.rowIndex="1" />
+                            <ComboBox fx:id="cmbMedicineId" maxWidth="1.7976931348623157E308" onAction="#cmbMedicineOnAction" prefHeight="35.0" promptText="Select Medicine" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 2;" GridPane.rowIndex="1" />
 
-                            <Label text="Description" GridPane.columnIndex="1">
+                            <Label text="Description" textFill="#475569" GridPane.columnIndex="1">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblDescription" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-border-color: #e2e8f0; -fx-background-color: white; -fx-padding: 0 0 0 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label fx:id="lblDescription" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                            <Label text="Unit Price" GridPane.columnIndex="2">
+                            <Label text="Unit Price" textFill="#475569" GridPane.columnIndex="2">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblUnitPrice" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-border-color: #e2e8f0; -fx-background-color: white; -fx-padding: 0 0 0 10;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                            <Label fx:id="lblUnitPrice" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
-                            <Label text="Qty. On Hand" GridPane.columnIndex="3">
+                            <Label text="Qty. On Hand" textFill="#475569" GridPane.columnIndex="3">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblQtyOnHand" maxWidth="1.7976931348623157E308" prefHeight="30.0" style="-fx-border-color: #e2e8f0; -fx-background-color: white; -fx-padding: 0 0 0 10;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                            <Label fx:id="lblQtyOnHand" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                            <Label text="Qty" GridPane.columnIndex="4">
+                            <Label text="Qty" textFill="#475569" GridPane.columnIndex="4">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <TextField fx:id="txtQty" alignment="CENTER_RIGHT" promptText="0" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                            <TextField fx:id="txtQty" alignment="CENTER_RIGHT" promptText="Enter Qty" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
 
-                            <Button fx:id="btnAddToCart" mnemonicParsing="false" onAction="#btnAddToCartOnAction" prefHeight="32.0" prefWidth="120.0" style="-fx-background-color: #3b82f6;" text="Add to Cart" textFill="WHITE" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                            <Button fx:id="btnAddToCart" mnemonicParsing="false" onAction="#btnAddToCartOnAction" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #3b82f6; -fx-background-radius: 8; -fx-cursor: hand;" text="Add to Cart" textFill="WHITE" GridPane.columnIndex="5" GridPane.rowIndex="1">
                                 <font><Font name="System Bold" size="14.0" /></font>
                                 <GridPane.margin><Insets left="10.0" /></GridPane.margin>
                             </Button>
@@ -134,18 +134,13 @@
                 </children>
             </VBox>
 
-            <TableView fx:id="tblOrderCart" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tblOrderCart" style="-fx-background-radius: 8; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="colMedicineId" prefWidth="120.0" text="Medicine ID" />
-
                     <TableColumn fx:id="colDescription" prefWidth="300.0" text="Description" />
-
                     <TableColumn fx:id="colQty" prefWidth="100.0" text="Qty" />
-
                     <TableColumn fx:id="colUnitPrice" prefWidth="150.0" text="Unit Price" />
-
                     <TableColumn fx:id="colLineTotal" prefWidth="150.0" text="Line Total" />
-
                     <TableColumn fx:id="colAction" prefWidth="120.0" text="Action" />
                 </columns>
                 <columnResizePolicy>
@@ -165,7 +160,8 @@
                             <Font name="System Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Button fx:id="btnPlaceOrder" mnemonicParsing="false" onAction="#btnPlaceOrderOnAction" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #22c55e;" text="Place Order" textFill="WHITE">
+
+                    <Button fx:id="btnPlaceOrder" mnemonicParsing="false" onAction="#btnPlaceOrderOnAction" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #22c55e; -fx-background-radius: 8; -fx-cursor: hand;" text="Place Order" textFill="WHITE">
                         <font>
                             <Font name="System Bold" size="16.0" />
                         </font>

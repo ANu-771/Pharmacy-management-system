@@ -64,7 +64,9 @@ public class CustomerController {
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-            populateFields(newValue);
+            if (newValue != null) {
+                populateFields(newValue);
+            }
         });
 
 

@@ -27,7 +27,7 @@
                 <children>
                     <Label text="Customer Manage" textFill="#1e293b">
                         <font>
-                            <Font name="System" size="26.0" />
+                            <Font name="System Bold" size="26.0" />
                         </font>
                     </Label>
                 </children>
