@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class SupplierDetailDTO {
 
-    private String supplierId;
-    private String medicineId;
+    private int supplierId;
+    private int medicineId;
     private Date supplyDate;
     private int quantitySupplied;
 
@@ -13,7 +13,7 @@ public class SupplierDetailDTO {
     public SupplierDetailDTO() {
     }
 
-    public SupplierDetailDTO(String supplierId, String medicineId, Date supplyDate, int quantitySupplied) {
+    public SupplierDetailDTO(int supplierId, int medicineId, Date supplyDate, int quantitySupplied) {
         this.supplierId = supplierId;
         this.medicineId = medicineId;
         this.supplyDate = supplyDate;
@@ -21,19 +21,19 @@ public class SupplierDetailDTO {
     }
 
     // Getters and Setters
-    public String getSupplierId() {
+    public int getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(String supplierId) {
+    public void setSupplierId(int supplierId) {
         this.supplierId = supplierId;
     }
 
-    public String getMedicineId() {
+    public int getMedicineId() {
         return medicineId;
     }
 
-    public void setMedicineId(String medicineId) {
+    public void setMedicineId(int medicineId) {
         this.medicineId = medicineId;
     }
 

@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class PaymentDTO {
 
-    private String paymentId;
-    private String orderId;
+    private int paymentId;
+    private int orderId;
     private double amount;
     private Date paymentDate;
     private String paymentMethod;
@@ -14,7 +14,7 @@ public class PaymentDTO {
     public PaymentDTO() {
     }
 
-    public PaymentDTO(String paymentId, String orderId, double amount, Date paymentDate, String paymentMethod) {
+    public PaymentDTO(int paymentId, int orderId, double amount, Date paymentDate, String paymentMethod) {
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.amount = amount;
@@ -23,19 +23,19 @@ public class PaymentDTO {
     }
 
     // Getters and Setters
-    public String getPaymentId() {
+    public int getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(String paymentId) {
+    public void setPaymentId(int paymentId) {
         this.paymentId = paymentId;
     }
 
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 

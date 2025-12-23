@@ -2,7 +2,7 @@ package lk.ijse.pharmacy.dto;
 
 public class UserDTO {
 
-    private String userId;
+    private int userId;
     private String username;
     private String email;
     private String password;
@@ -11,7 +11,7 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String userId, String username, String email, String password) {
+    public UserDTO(int userId, String username, String email, String password) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -19,11 +19,11 @@ public class UserDTO {
     }
 
     // Getters and Setters
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

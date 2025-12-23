@@ -2,8 +2,8 @@ package lk.ijse.pharmacy.dto;
 
 public class OrderMedicineDTO {
 
-    private String orderId;
-    private String medicineId;
+    private int orderId;
+    private int medicineId;
     private int qty;
     private double unitPrice;
     private double lineTotal;
@@ -12,7 +12,7 @@ public class OrderMedicineDTO {
     public OrderMedicineDTO() {
     }
 
-    public OrderMedicineDTO(String orderId, String medicineId, int qty, double unitPrice, double lineTotal) {
+    public OrderMedicineDTO(int orderId, int medicineId, int qty, double unitPrice, double lineTotal) {
         this.orderId = orderId;
         this.medicineId = medicineId;
         this.qty = qty;
@@ -21,19 +21,19 @@ public class OrderMedicineDTO {
     }
 
     // Getters and Setters
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public String getMedicineId() {
+    public int getMedicineId() {
         return medicineId;
     }
 
-    public void setMedicineId(String medicineId) {
+    public void setMedicineId(int medicineId) {
         this.medicineId = medicineId;
     }
 
