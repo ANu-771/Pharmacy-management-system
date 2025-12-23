@@ -13,6 +13,7 @@ import lk.ijse.pharmacy.dto.MedicineDTO;
 import lk.ijse.pharmacy.model.DashboardModel;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 public class DashboardController {
 
@@ -75,7 +76,12 @@ public class DashboardController {
 
             Map<String, Double> trends = dashboardModel.getIncomeTrends();
 
-            for (Map.Entry<String, Double> entry : trends.entrySet()) {
+            //
+            Map<String, Double> sortedTrends = new TreeMap<>(trends);
+            //use tre map bz hashmap mix the data tree map give corectly sortded data for chat
+            //
+
+            for (Map.Entry<String, Double> entry : sortedTrends.entrySet()) {
                 series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
 
