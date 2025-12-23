@@ -15,7 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 1280, 720);
+        scene = new Scene(loadFXML("layout"), 1280, 720);
 
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/image/pharmacy.png")));
         stage.setTitle("KK Pharmacy Management System");

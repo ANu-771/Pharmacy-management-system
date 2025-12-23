@@ -66,7 +66,9 @@ public class SupplierController {
         colContact.setCellValueFactory(new PropertyValueFactory<>("contactNum"));
 
         tblSupplier.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-            populateFields(newValue);
+            if(newValue!=null){
+                populateFields(newValue);
+            }
         });
 
 
@@ -89,6 +91,7 @@ public class SupplierController {
                 if (supplierDTO == null) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Supplier Not Found");
                     alert.showAndWait();
+                    clearFields();
                     return;
                 }
                 populateFields(supplierDTO);
@@ -96,6 +99,7 @@ public class SupplierController {
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Supplier Not Found");
                 alert.showAndWait();
+                clearFields();
             }
         }
 

@@ -78,6 +78,7 @@ public class CustomerController {
 
             if (!id.matches("^\\d+$")) {
                 new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+                clearFields();
                 return;
             }
 
@@ -87,6 +88,7 @@ public class CustomerController {
                 if (customerDTO == null) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer Not Found");
                     alert.showAndWait();
+                    clearFields();
                     return;
                 }
                 populateFields(customerDTO);
