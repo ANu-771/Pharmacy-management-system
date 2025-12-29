@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.geometry.Side;
+import java.util.stream.Collectors;
 
 public class OrderController {
 
@@ -57,7 +61,7 @@ public class OrderController {
     private Label lblCustomerName;
 
     @FXML
-    private Label lblDescription;
+    private TextField txtDescription;
 
     @FXML
     private Label lblOrderDate;
@@ -80,6 +84,8 @@ public class OrderController {
     private OrderModel orderModel = new OrderModel();
     private CustomerModel customerModel = new CustomerModel();
     private MedicineModel medicineModel = new MedicineModel();
+    // List to hold all medicine names for the search
+    private List<String> allMedicineNames = new ArrayList<>();
 
     private ObservableList<CartTM> cartList = FXCollections.observableArrayList();
     private double netTotal = 0;
@@ -91,6 +97,9 @@ public class OrderController {
         loadCustomerIds();
         loadMedicineIds();
         lblOrderDate.setText(String.valueOf(LocalDate.now()));
+
+        loadMedicineNames();
+        setupAutoSuggestion();
     }
 
     private void setCellValueFactory() {
@@ -163,7 +172,7 @@ public class OrderController {
         try {
             MedicineDTO medicine = medicineModel.search(Integer.parseInt(id));
             if (medicine != null) {
-                lblDescription.setText(medicine.getMedName());
+                txtDescription.setText(medicine.getMedName());
                 lblUnitPrice.setText(String.valueOf(medicine.getUnitPrice()));
                 lblQtyOnHand.setText(String.valueOf(medicine.getQtyInStock()));
                 txtQty.requestFocus();
@@ -191,7 +200,7 @@ public class OrderController {
 
 
         try {
-            String desc = lblDescription.getText();
+            String desc = txtDescription.getText();
             double unitPrice = Double.parseDouble(lblUnitPrice.getText());
             int qtyOnHand = Integer.parseInt(lblQtyOnHand.getText());
             int qty = Integer.parseInt(qtyText);
@@ -278,7 +287,7 @@ public class OrderController {
                 loadNextOrderId();
 
                 cmbMedicineId.getSelectionModel().clearSelection();
-                lblDescription.setText("");
+                txtDescription.setText("");
                 lblQtyOnHand.setText("");
                 lblUnitPrice.setText("");
             } else {
@@ -288,4 +297,95 @@ public class OrderController {
             new Alert(Alert.AlertType.ERROR, "SQL Error: " + e.getMessage()).show();
         }
     }
+
+    @FXML
+    public void txtSearchMedicineOnAction(ActionEvent actionEvent) {
+        String name = txtDescription.getText().trim();
+
+        try {
+            // Assuming you added searchByName to MedicineModel as discussed
+            MedicineDTO medicine = medicineModel.searchByName(name);
+
+            if (medicine != null) {
+                // If found, auto-select the ID in the ComboBox
+                cmbMedicineId.setValue(String.valueOf(medicine.getMedicineId()));
+
+                // Fill other details
+                lblUnitPrice.setText(String.valueOf(medicine.getUnitPrice()));
+                lblQtyOnHand.setText(String.valueOf(medicine.getQtyInStock()));
+
+                // Move cursor to Quantity field for quick entry
+                txtQty.requestFocus();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Medicine not found!").show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 1. Loads all medicine names into our list
+    private void loadMedicineNames() {
+        try {
+            List<MedicineDTO> allMedicines = medicineModel.getAll();
+            allMedicineNames.clear();
+            for (MedicineDTO m : allMedicines) {
+                allMedicineNames.add(m.getMedName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 2. Sets up the "Live Filter" popup
+    private void setupAutoSuggestion() {
+        ContextMenu suggestionsMenu = new ContextMenu();
+
+        txtDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            // If text is empty, hide the menu
+            if (newValue == null || newValue.isEmpty()) {
+                suggestionsMenu.hide();
+                return;
+            }
+
+            // Filter the list: Find names that contain the typed letters (Ignore Case)
+            List<String> matches = allMedicineNames.stream()
+                    .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            // If no matches, hide menu
+            if (matches.isEmpty()) {
+                suggestionsMenu.hide();
+                return;
+            }
+
+            // Add matches to the ContextMenu
+            suggestionsMenu.getItems().clear();
+            for (String match : matches) {
+                MenuItem item = new MenuItem(match);
+
+                // Action: When user clicks a name from the list
+                item.setOnAction(event -> {
+                    txtDescription.setText(match);
+                    suggestionsMenu.hide();
+
+                    // Automatically trigger the search to fill Price & Qty
+                    txtSearchMedicineOnAction(null);
+                });
+
+                suggestionsMenu.getItems().add(item);
+            }
+
+            // Show the menu below the Text Field
+            if (!suggestionsMenu.isShowing()) {
+                suggestionsMenu.show(txtDescription, Side.BOTTOM, 0, 0);
+            }
+        });
+
+        // Optional: Hide menu if user clicks away
+        txtDescription.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) suggestionsMenu.hide();
+        });
+    }
+
 }

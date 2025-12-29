@@ -15,6 +15,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.geometry.Side;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MedicineController {
 
@@ -52,12 +58,16 @@ public class MedicineController {
 
     private MedicineModel medicineModel = new MedicineModel();
     private ObservableList<MedicineDTO> medicineList = FXCollections.observableArrayList();
+    private List<String> allMedicineNames = new ArrayList<>();
 
     @FXML
     private void initialize() {
-       // txtId.setEditable(false);
         loadAllMedicines();
         setupTable();
+
+        loadMedicineNames();    // 1. Load names into memory
+        setupAutoSuggestion();
+
         tblMedicine.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) populateFields(newVal);
         });
@@ -152,23 +162,41 @@ public class MedicineController {
         }
     }
 
+
     @FXML
     private void handlePressEnter(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             String idText = txtId.getText().trim();
+            String nameText = txtName.getText().trim();
 
-            if (!idText.matches("^\\d+$")) {
-                new Alert(Alert.AlertType.WARNING, "Please enter a valid Medicine ID!").show();
-                return;
-            }
+            MedicineDTO medicineDTO = null;
 
             try {
-                MedicineDTO medicineDTO = medicineModel.search(Integer.parseInt(idText));
+                // 1. Check if ID field is not empty -> Search by ID
+                if (!idText.isEmpty()) {
+                    if (idText.matches("^\\d+$")) {
+                        medicineDTO = medicineModel.search(Integer.parseInt(idText));
+                    } else {
+                        new Alert(Alert.AlertType.WARNING, "Invalid ID format!").show();
+                        return;
+                    }
+                }
+                // 2. If ID is empty, check Name field -> Search by Name
+                else if (!nameText.isEmpty()) {
+                    medicineDTO = medicineModel.searchByName(nameText);
+                }
+                // 3. If both are empty
+                else {
+                    new Alert(Alert.AlertType.WARNING, "Please enter an ID or Name to search!").show();
+                    return;
+                }
 
+                // 4. Process Result
                 if (medicineDTO != null) {
                     populateFields(medicineDTO);
                 } else {
-                    new Alert(Alert.AlertType.INFORMATION, "Medicine Not Found").show();
+                    new Alert(Alert.AlertType.INFORMATION, "Medicine Not Found").showAndWait();
+                    clearFields();
                 }
 
             } catch (Exception e) {
@@ -176,6 +204,10 @@ public class MedicineController {
             }
         }
     }
+
+
+
+
 
 
     private void setupTable() {
@@ -192,6 +224,10 @@ public class MedicineController {
         try {
             medicineList.clear();
             medicineList.addAll(medicineModel.getAll());
+
+            // Refresh the suggestions list whenever table reloads
+            loadMedicineNames();
+
         } catch (SQLException | ClassNotFoundException e) { e.printStackTrace(); }
     }
 
@@ -208,6 +244,78 @@ public class MedicineController {
         if (dto.getExpDate() != null) {
             dpExpDate.setValue(new java.sql.Date(dto.getExpDate().getTime()).toLocalDate());
         }
+    }
+
+    // 1. Load all names from DB
+    private void loadMedicineNames() {
+        try {
+            List<MedicineDTO> allMedicines = medicineModel.getAll();
+            allMedicineNames.clear();
+            for (MedicineDTO m : allMedicines) {
+                allMedicineNames.add(m.getMedName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 2. Setup the popup listener
+    private void setupAutoSuggestion() {
+        ContextMenu suggestionsMenu = new ContextMenu();
+
+        txtName.textProperty().addListener((observable, oldValue, newValue) -> {
+            // If text is empty, hide menu
+            if (newValue == null || newValue.isEmpty()) {
+                suggestionsMenu.hide();
+                return;
+            }
+
+            // Filter: Find names containing the typed text (Case Insensitive)
+            List<String> matches = allMedicineNames.stream()
+                    .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            // If no matches, hide menu
+            if (matches.isEmpty()) {
+                suggestionsMenu.hide();
+                return;
+            }
+
+            // Add matches to menu
+            suggestionsMenu.getItems().clear();
+            for (String match : matches) {
+                MenuItem item = new MenuItem(match);
+
+                // Action: When user clicks a name
+                item.setOnAction(event -> {
+                    txtName.setText(match);
+                    suggestionsMenu.hide();
+
+                    // --- AUTO-FILL FORM LOGIC ---
+                    try {
+                        MedicineDTO medicine = medicineModel.searchByName(match);
+                        if (medicine != null) {
+                            populateFields(medicine);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // ----------------------------
+                });
+
+                suggestionsMenu.getItems().add(item);
+            }
+
+            // Show the popup below the Name field
+            if (!suggestionsMenu.isShowing()) {
+                suggestionsMenu.show(txtName, Side.BOTTOM, 0, 0);
+            }
+        });
+
+        // Hide if user clicks away
+        txtName.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) suggestionsMenu.hide();
+        });
     }
 
     @FXML

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.ReportController">
+<BorderPane prefHeight="720.0" prefWidth="1040.0" stylesheets="@../view/table.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.pharmacy.controller.ReportController">
 
     <center>
         <VBox spacing="20.0" style="-fx-background-color: white;">
@@ -26,52 +26,52 @@
 
             <Label text="Report &amp; Analytics" textFill="#1e293b">
                 <font>
-                    <Font name="System Bold" size="24.0" />
+                    <Font name="System Bold" size="26.0" />
                 </font>
             </Label>
 
             <Separator />
 
-            <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: #f8fafc; -fx-background-radius: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
                 <padding>
                     <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                 </padding>
                 <children>
                     <VBox spacing="5.0">
                         <children>
-                            <Label text="Report Type" textFill="#64748b">
+                            <Label text="Report Type" textFill="#475569">
                                 <font><Font name="System Bold" size="12.0" /></font>
                             </Label>
-                            <ComboBox fx:id="cmbReportType" prefWidth="200.0" promptText="Select Report" style="-fx-background-color: white; -fx-border-color: #e2e8f0;" />
+                            <ComboBox fx:id="cmbReportType" prefWidth="200.0" promptText="Select Report" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8;" />
                         </children>
                     </VBox>
 
                     <VBox spacing="5.0">
                         <children>
-                            <Label text="From Date" textFill="#64748b">
+                            <Label text="From Date" textFill="#475569">
                                 <font><Font name="System Bold" size="12.0" /></font>
                             </Label>
-                            <DatePicker fx:id="dpFromDate" style="-fx-border-color: #e2e8f0;" />
+                            <DatePicker fx:id="dpFromDate" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8;" />
                         </children>
                     </VBox>
 
                     <VBox spacing="5.0">
                         <children>
-                            <Label text="To Date" textFill="#64748b">
+                            <Label text="To Date" textFill="#475569">
                                 <font><Font name="System Bold" size="12.0" /></font>
                             </Label>
-                            <DatePicker fx:id="dpToDate" style="-fx-border-color: #e2e8f0;" />
+                            <DatePicker fx:id="dpToDate" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8;" />
                         </children>
                     </VBox>
 
                     <HBox HBox.hgrow="ALWAYS" />
 
-                    <Button fx:id="btnGenerate" mnemonicParsing="false" onAction="#btnGenerateOnAction" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #3b82f6;" text="Generate View" textFill="WHITE">
+                    <Button fx:id="btnGenerate" mnemonicParsing="false" onAction="#btnGenerateOnAction" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #3b82f6; -fx-background-radius: 8; -fx-cursor: hand;" text="Generate View" textFill="WHITE">
                         <font><Font name="System Bold" size="13.0" /></font>
                         <HBox.margin><Insets top="18.0" /></HBox.margin>
                     </Button>
 
-                    <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#btnPrintOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #f59e0b;" text="Print / PDF" textFill="WHITE">
+                    <Button fx:id="btnPrint" mnemonicParsing="false" onAction="#btnPrintOnAction" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #f59e0b; -fx-background-radius: 8; -fx-cursor: hand;" text="Print / PDF" textFill="WHITE">
                         <font><Font name="System Bold" size="13.0" /></font>
                         <HBox.margin><Insets top="18.0" /></HBox.margin>
                     </Button>
@@ -80,7 +80,7 @@
 
             <HBox spacing="20.0">
                 <children>
-                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #ecfdf5; -fx-background-radius: 10; -fx-border-color: #10b981; -fx-border-radius: 10; -fx-border-width: 0.5;">
+                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #ecfdf5; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
                         <padding><Insets bottom="15.0" left="20.0" right="20.0" top="15.0" /></padding>
                         <children>
                             <Label text="Total Sales" textFill="#047857">
@@ -92,7 +92,7 @@
                         </children>
                     </VBox>
 
-                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #eff6ff; -fx-background-radius: 10; -fx-border-color: #3b82f6; -fx-border-radius: 10; -fx-border-width: 0.5;">
+                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #eff6ff; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
                         <padding><Insets bottom="15.0" left="20.0" right="20.0" top="15.0" /></padding>
                         <children>
                             <Label text="Total Orders" textFill="#1d4ed8">
@@ -104,7 +104,7 @@
                         </children>
                     </VBox>
 
-                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #fff7ed; -fx-background-radius: 10; -fx-border-color: #f97316; -fx-border-radius: 10; -fx-border-width: 0.5;">
+                    <VBox prefHeight="100.0" prefWidth="250.0" style="-fx-background-color: #fff7ed; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
                         <padding><Insets bottom="15.0" left="20.0" right="20.0" top="15.0" /></padding>
                         <children>
                             <Label text="Items Sold" textFill="#c2410c">
@@ -120,7 +120,7 @@
 
             <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                 <children>
-                    <VBox style="-fx-background-color: #f8fafc; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                    <VBox style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);" HBox.hgrow="ALWAYS">
                         <padding><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></padding>
                         <children>
                             <Label text="Performance Overview" textFill="#475569">
@@ -138,14 +138,14 @@
                         </children>
                     </VBox>
 
-                    <VBox style="-fx-background-color: #f8fafc; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                    <VBox style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);" HBox.hgrow="ALWAYS">
                         <padding><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></padding>
                         <children>
                             <Label text="Detailed Records" textFill="#475569">
                                 <font><Font name="System Bold" size="14.0" /></font>
                                 <VBox.margin><Insets bottom="10.0" left="10.0" top="5.0" /></VBox.margin>
                             </Label>
-                            <TableView fx:id="tblReportDetails" VBox.vgrow="ALWAYS">
+                            <TableView fx:id="tblReportDetails" style="-fx-background-radius: 8; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="colDate" prefWidth="100.0" text="Date" />
                                     <TableColumn fx:id="colItem" prefWidth="150.0" text="Description/ID" />

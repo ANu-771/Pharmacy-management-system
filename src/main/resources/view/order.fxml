@@ -100,15 +100,18 @@
                             <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
+
                             <Label text="Medicine ID" textFill="#475569">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
                             <ComboBox fx:id="cmbMedicineId" maxWidth="1.7976931348623157E308" onAction="#cmbMedicineOnAction" prefHeight="35.0" promptText="Select Medicine" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 2;" GridPane.rowIndex="1" />
 
-                            <Label text="Description" textFill="#475569" GridPane.columnIndex="1">
+                            <Label text="Description (Search)" textFill="#475569" GridPane.columnIndex="1">
                                 <font><Font name="System Bold" size="14.0" /></font>
                             </Label>
-                            <Label fx:id="lblDescription" maxWidth="1.7976931348623157E308" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 0 0 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextField fx:id="txtDescription" onAction="#txtSearchMedicineOnAction" promptText="Type Name &amp; Enter" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <font><Font size="13.0" /></font>
+                            </TextField>
 
                             <Label text="Unit Price" textFill="#475569" GridPane.columnIndex="2">
                                 <font><Font name="System Bold" size="14.0" /></font>

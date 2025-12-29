@@ -84,4 +84,24 @@ public class MedicineModel {
         }
         return null;
     }
+
+    public MedicineDTO searchByName(String name) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM medicine WHERE med_name = ?";
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, name);
+        ResultSet resultSet = pstm.executeQuery();
+
+        if (resultSet.next()) {
+            return new MedicineDTO(
+                    resultSet.getInt("medicine_id"),
+                    resultSet.getString("med_name"),
+                    resultSet.getString("brand"),
+                    resultSet.getInt("qty_in_stock"),
+                    resultSet.getDouble("unit_price"),
+                    resultSet.getDate("exp_date")
+            );
+        }
+        return null;
+    }
 }
