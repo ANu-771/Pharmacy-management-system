@@ -21,6 +21,7 @@ import javafx.geometry.Side;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.scene.control.TableRow;
 
 public class MedicineController {
 
@@ -218,6 +219,37 @@ public class MedicineController {
         colPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colExpDate.setCellValueFactory(new PropertyValueFactory<>("expDate"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("qtyInStock"));
+
+
+        // --- NEW CODE: Highlight Rows based on Expiry Date ---
+        tblMedicine.setRowFactory(tv -> new TableRow<MedicineDTO>() {
+            @Override
+            protected void updateItem(MedicineDTO item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty || item.getExpDate() == null) {
+                    setStyle(""); // Reset style for empty rows
+                } else {
+                    // 1. Convert Date to LocalDate
+                    java.time.LocalDate expDate = new java.sql.Date(item.getExpDate().getTime()).toLocalDate();
+                    java.time.LocalDate today = java.time.LocalDate.now();
+
+                    // 2. Check Conditions
+                    if (expDate.isBefore(today)) {
+                        // EXPIRED: Deep Red
+                        setStyle("-fx-background-color: #ff9999; -fx-text-background-color: white;");
+                    }
+                    else if (expDate.isBefore(today.plusDays(21))) {
+                        // EXPIRING SOON (Next 14 Days): Light Red / Pink
+                        setStyle("-fx-background-color: #ffcdd2;");
+                    }
+                    else {
+                        // NORMAL: Clear style
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 
     private void loadAllMedicines() {

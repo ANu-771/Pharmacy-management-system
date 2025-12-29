@@ -6,6 +6,7 @@ module lk.ijse.pharmacy {
     requires org.controlsfx.controls;
     requires java.sql;
     requires java.desktop;
+    requires net.sf.jasperreports.core;
 
 
     opens lk.ijse.pharmacy to javafx.fxml;

@@ -87,6 +87,8 @@ public class OrderController {
     // List to hold all medicine names for the search
     private List<String> allMedicineNames = new ArrayList<>();
 
+    private MedicineDTO selectedMedicine = null;
+
     private ObservableList<CartTM> cartList = FXCollections.observableArrayList();
     private double netTotal = 0;
 
@@ -172,6 +174,8 @@ public class OrderController {
         try {
             MedicineDTO medicine = medicineModel.search(Integer.parseInt(id));
             if (medicine != null) {
+                selectedMedicine = medicine;
+
                 txtDescription.setText(medicine.getMedName());
                 lblUnitPrice.setText(String.valueOf(medicine.getUnitPrice()));
                 lblQtyOnHand.setText(String.valueOf(medicine.getQtyInStock()));
@@ -186,10 +190,38 @@ public class OrderController {
     public void btnAddToCartOnAction(ActionEvent actionEvent) {
         // med select chek krnw
         String medId = cmbMedicineId.getValue();
-        if (medId == null) {
+        if (medId == null || selectedMedicine == null) {  // Check selectedMedicine too
             new Alert(Alert.AlertType.WARNING, "Please select a medicine first!").show();
             return;
         }
+
+        // --- EXPIRY DATE VALIDATION ---
+        try {
+            // Convert DTO Date to LocalDate
+            java.time.LocalDate expDate = new java.sql.Date(selectedMedicine.getExpDate().getTime()).toLocalDate();
+            java.time.LocalDate today = java.time.LocalDate.now();
+
+            // Check 1: Is it already expired?
+            if (expDate.isBefore(today)) {
+                new Alert(Alert.AlertType.ERROR,
+                        "Cannot Sell! This medicine EXPIRED on: " + expDate).show();
+                return; // Stop here
+            }
+
+            // Check 2: Is it expiring soon? (e.g., within next 21 days)
+            if (expDate.isBefore(today.plusDays(21))) {
+                new Alert(Alert.AlertType.WARNING,
+                        "Warning! Medicine expires soon (" + expDate + "). Cannot add to bill.").show();
+                return; // Stop here
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return; // Stop if date conversion fails
+        }
+
+
+
 
         // qty enter krnld blnw
         String qtyText = txtQty.getText().trim();
@@ -307,6 +339,8 @@ public class OrderController {
             MedicineDTO medicine = medicineModel.searchByName(name);
 
             if (medicine != null) {
+                selectedMedicine = medicine;
+
                 // If found, auto-select the ID in the ComboBox
                 cmbMedicineId.setValue(String.valueOf(medicine.getMedicineId()));
 
