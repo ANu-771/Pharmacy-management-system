@@ -28,7 +28,7 @@ public class OrderModel {
     }
 
     //  THE TRANSACTION METHOD
-    public boolean placeOrder(OrderDTO order, List<CartTM> cartList) throws SQLException {
+    public String placeOrder(OrderDTO order, List<CartTM> cartList) throws SQLException {
         Connection connection = null;
         try {
             connection = DBConnection.getInstance().getConnection();
@@ -36,37 +36,41 @@ public class OrderModel {
             connection.setAutoCommit(false);
 
 
-            String sqlOrder = "INSERT INTO orders (customer_id, user_id, total, order_date) VALUES (?, ?, ?, ?)";
+            String sqlOrder = "INSERT INTO orders (customer_id, user_id, total, order_date, order_time) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement pstmOrder = connection.prepareStatement(sqlOrder, Statement.RETURN_GENERATED_KEYS);
             pstmOrder.setInt(1, Integer.parseInt(String.valueOf(order.getCustomerId())));
             pstmOrder.setInt(2, 1);
             pstmOrder.setDouble(3, order.getTotal());
             pstmOrder.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
 
+            // 2. SET TIME: Explicitly set the time from Java (Local Time)
+            pstmOrder.setTime(5, new java.sql.Time(order.getOrderDate().getTime()));
+
             boolean isOrderSaved = pstmOrder.executeUpdate() > 0;
+            String generatedOrderId = null;
 
             if (isOrderSaved) {
 
                 ResultSet generatedKeys = pstmOrder.getGeneratedKeys();
-                int orderId = 0;
                 if (generatedKeys.next()) {
-                    orderId = generatedKeys.getInt(1);
+                    // Assign the ID to the String variable used later
+                    generatedOrderId = String.valueOf(generatedKeys.getInt(1));
                 }
 
 
                 boolean isDetailsSaved = true;
                 boolean isStockUpdated = true;
-                boolean isItemsUpdated = true;
 
                 for (CartTM cartItem : cartList) {
                     int medicineId = Integer.parseInt(cartItem.getMedicineId());
                     int qty = cartItem.getQty();
 
 
-                    // SAVE ORDER DETAILS
+                    // insert ORDER DETAILS
                     String sqlDetail = "INSERT INTO order_medicine (order_id, medicine_id, qty, unit_price, line_total) VALUES (?, ?, ?, ?, ?)";
                     PreparedStatement pstmDetail = connection.prepareStatement(sqlDetail);
-                    pstmDetail.setInt(1, orderId);
+                    //pstmDetail.setInt(1, orderId);
+                    pstmDetail.setInt(1, Integer.parseInt(generatedOrderId));
                     pstmDetail.setInt(2, medicineId);
                     pstmDetail.setInt(3, qty);
                     pstmDetail.setDouble(4, cartItem.getUnitPrice());
@@ -89,41 +93,21 @@ public class OrderModel {
                         break;
                     }
 
-
-                    // update MEDICINE_ITEMS
-                    String sqlItems = "UPDATE medicine_items SET sold_date = ? WHERE medicine_id = ? AND sold_date IS NULL LIMIT ?";
-                    PreparedStatement pstmItems = connection.prepareStatement(sqlItems);
-                    pstmItems.setDate(1, new java.sql.Date(System.currentTimeMillis()));
-                    pstmItems.setInt(2, medicineId);
-                    pstmItems.setInt(3, qty);
-
-                    int updatedRows = pstmItems.executeUpdate();
-
-//                    if (pstmItems.executeUpdate() <= 0) {
-//                        isItemsUpdated = false;
-//                        break;
-//                    }
-//                }
-
-
-                    if (updatedRows < qty) {
-                        System.out.println("Warning: Not enough items in medicine_items table for ID " + medicineId);
-                    }
                 }
-                if (isDetailsSaved && isStockUpdated && isItemsUpdated) {
+                if (isDetailsSaved && isStockUpdated) {
                     // Commit Transaction
                     connection.commit();
-                    return true;
+                    return generatedOrderId; // SUCCESS: Return the ID
                 }
             }
 
             connection.rollback();
-            return false;
+            return null; // FAIL: Return null
 
         } catch (Exception e) {
             e.printStackTrace();
             if (connection != null) connection.rollback();
-            return false;
+            return null;
         } finally {
             if (connection != null) connection.setAutoCommit(true);
         }

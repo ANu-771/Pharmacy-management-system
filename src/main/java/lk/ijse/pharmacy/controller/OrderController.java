@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.dto.CustomerDTO;
 import lk.ijse.pharmacy.dto.MedicineDTO;
 import lk.ijse.pharmacy.dto.OrderDTO;
@@ -17,6 +18,7 @@ import lk.ijse.pharmacy.model.CustomerModel;
 import lk.ijse.pharmacy.model.MedicineModel;
 import lk.ijse.pharmacy.model.OrderModel;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +29,11 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
 import java.util.stream.Collectors;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OrderController {
 
@@ -311,9 +318,13 @@ public class OrderController {
         List<CartTM> cartData = new ArrayList<>(cartList);
 
         try {
-            boolean isPlaced = orderModel.placeOrder(order, cartData);
-            if (isPlaced) {
+            String orderId = orderModel.placeOrder(order, cartData);
+           // boolean isPlaced = orderModel.placeOrder(order, cartData);
+
+            if (orderId != null) {
                 new Alert(Alert.AlertType.INFORMATION, "Order Placed Successfully!").show();
+                printBill(Integer.parseInt(orderId));
+
                 cartList.clear();
                 calculateNetTotal();
                 loadNextOrderId();
@@ -327,6 +338,34 @@ public class OrderController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "SQL Error: " + e.getMessage()).show();
+        }
+    }
+
+    private void printBill(int orderId) {
+        try {
+            // Make sure "bill.jrxml" matches the filename in src/main/resources/report/
+            InputStream reportStream = getClass().getResourceAsStream("/report/bill.jrxml");
+
+            if (reportStream == null) {
+                new Alert(Alert.AlertType.ERROR, "Bill report file not found!").show();
+                return;
+            }
+
+            // 1. Map the Order ID parameter
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("p_order_id", orderId);
+
+            // 2. Compile and Fill
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+            Connection connection = DBConnection.getInstance().getConnection();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            // 3. View the Report (false = don't exit app on close)
+            JasperViewer.viewReport(jasperPrint, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error printing bill: " + e.getMessage()).show();
         }
     }
 

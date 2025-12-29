@@ -55,12 +55,11 @@ public class ReportController {
 
     @FXML
     public void initialize() {
-        // 1. Initialize ComboBox
+        // 1. Initialize ComboBox (Removed "Bill (Sales) Report")
         ObservableList<String> reportTypes = FXCollections.observableArrayList(
                 "Customer Report",
                 "Supplier Report",
-                "Stock Report",
-                "Bill (Sales) Report"
+                "Stock Report"
         );
         cmbReportType.setItems(reportTypes);
 
@@ -77,18 +76,49 @@ public class ReportController {
 
     private void loadSummaryLabels() {
         try {
+            // Existing: Today's Income
             double todayIncome = dashboardModel.getTodayIncome();
             lblTotalSales.setText(String.format("Rs. %.2f", todayIncome));
+
+            // NEW: Total Orders Count
+            int totalOrders = getTotalOrders();
+            lblTotalOrders.setText(String.valueOf(totalOrders));
+
+            // NEW: Total Items Sold
+            int itemsSold = getItemsSold();
+            lblItemsSold.setText(String.valueOf(itemsSold));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // --- NEW METHOD: Get Total Orders Count ---
+    private int getTotalOrders() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM orders";
+        Connection connection = DBConnection.getInstance().getConnection();
+        ResultSet resultSet = connection.createStatement().executeQuery(sql);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
+
+    // --- NEW METHOD: Get Total Items Sold ---
+    private int getItemsSold() throws SQLException {
+        String sql = "SELECT SUM(qty) FROM order_medicine";
+        Connection connection = DBConnection.getInstance().getConnection();
+        ResultSet resultSet = connection.createStatement().executeQuery(sql);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
+
     private void loadTableData() {
         ObservableList<ReportTM> list = FXCollections.observableArrayList();
 
-        // --- SQL UPDATE: Sorted by Date DESC and Order ID DESC ---
-        // This ensures today's orders are at the top, and the most recent one is first.
+        // Sorted by Date DESC and Order ID DESC
         String sql = "SELECT o.order_id, c.name, o.order_date, o.total " +
                 "FROM orders o " +
                 "JOIN customer c ON o.customer_id = c.customer_id " +
@@ -136,9 +166,7 @@ public class ReportController {
                 viewReport("stock.jrxml", null);
                 break;
 
-            case "Bill (Sales) Report":
-                new Alert(Alert.AlertType.INFORMATION, "Bill Report selected").show();
-                break;
+            // Removed "Bill (Sales) Report" case
 
             default:
                 new Alert(Alert.AlertType.ERROR, "Invalid Selection").show();
