@@ -2,6 +2,8 @@ package lk.ijse.pharmacy.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,6 +38,9 @@ public class LayoutController {
 
     @FXML
     private Button btnSupplier;
+
+    @FXML
+    private Button btnUser;
 
     @FXML
     public void initialize() {
@@ -127,6 +132,18 @@ public class LayoutController {
         try {
             contentArea.getChildren().clear();
             contentArea.getChildren().setAll(App.loadFXML("report"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void loadUser(){
+        setButtonActive(btnUser);
+
+        try {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().setAll(App.loadFXML("user"));
         }catch (Exception e){
             e.printStackTrace();
         }

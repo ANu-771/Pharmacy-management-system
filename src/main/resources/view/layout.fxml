@@ -50,6 +50,8 @@
 
             <Button fx:id="btnReport" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadReport" prefHeight="40.0" styleClass="nav-btn" text="Reports" />
 
+            <Button fx:id="btnUser" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadUser" prefHeight="40.0" styleClass="nav-btn" text="User Manage" />
+
             <Region VBox.vgrow="ALWAYS" />
 
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLogout" prefHeight="40.0" styleClass="logout-btn" text="Logout" />

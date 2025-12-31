@@ -1,4 +1,229 @@
 package lk.ijse.pharmacy.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode; // --- NEW ---
+import javafx.scene.input.KeyEvent; // --- NEW ---
+import lk.ijse.pharmacy.dto.UserDTO;
+import lk.ijse.pharmacy.model.UserModel;
+
+import java.sql.SQLException;
+import java.util.List;
+
 public class UserController {
+
+    @FXML private TextField txtId;
+    @FXML private TextField txtUsername;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtPassword;
+    @FXML private ComboBox<String> cmbRole;
+
+    @FXML private TableView<UserDTO> tblUser;
+    @FXML private TableColumn<UserDTO, Integer> colId;
+    @FXML private TableColumn<UserDTO, String> colName;
+    @FXML private TableColumn<UserDTO, String> colEmail;
+    @FXML private TableColumn<UserDTO, String> colRole;
+
+    private UserModel userModel = new UserModel();
+
+    @FXML
+    public void initialize() {
+        ObservableList<String> roles = FXCollections.observableArrayList("admin", "employee");
+        cmbRole.setItems(roles);
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+
+        loadAllUsers();
+
+        // --- NEW: Table Selection Listener (Click row -> Fill fields) ---
+        tblUser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                populateFields(newValue);
+            }
+        });
+    }
+
+    // --- NEW: Helper method to fill fields from a UserDTO ---
+    private void populateFields(UserDTO user) {
+        txtId.setText(String.valueOf(user.getUserId()));
+        txtUsername.setText(user.getUsername());
+        txtEmail.setText(user.getEmail());
+        txtPassword.setText(user.getPassword());
+        cmbRole.setValue(user.getRole());
+    }
+
+    // --- NEW: Search by pressing ENTER key on ID field ---
+    @FXML
+    private void handlePressEnter(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            txtSearchOnAction(new ActionEvent());
+        }
+    }
+
+    private void loadAllUsers() {
+        try {
+            List<UserDTO> userList = userModel.getAll();
+            ObservableList<UserDTO> obList = FXCollections.observableArrayList(userList);
+            tblUser.setItems(obList);
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to load users: " + e.getMessage()).show();
+        }
+    }
+
+    @FXML
+    void btnSaveOnAction(ActionEvent event) {
+        String name = txtUsername.getText();
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        String role = cmbRole.getValue();
+
+        // --- NEW: Basic Empty Check ---
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || role == null) {
+            new Alert(Alert.AlertType.WARNING, "Please fill all fields!").show();
+            return;
+        }
+
+        // --- NEW: Regex Validation Check ---
+        if (!validateUserInput(name, email, password)) {
+            return; // Stop if validation fails
+        }
+
+        UserDTO user = new UserDTO(0, name, email, password);
+
+        try {
+            if (userModel.save(user, role)) {
+                new Alert(Alert.AlertType.INFORMATION, "User Saved!").show();
+                btnClearOnAction(event);
+                loadAllUsers();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Save Failed").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "SQL Error: " + e.getMessage()).show();
+        }
+    }
+
+    @FXML
+    void btnUpdateOnAction(ActionEvent event) {
+        String idText = txtId.getText();
+
+        // --- NEW: ID Validation ---
+        if (idText.isEmpty() || !idText.matches("^\\d+$")) {
+            new Alert(Alert.AlertType.WARNING, "Please enter a valid User ID!").show();
+            return;
+        }
+
+        int id = Integer.parseInt(idText);
+        String name = txtUsername.getText();
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        String role = cmbRole.getValue();
+
+        // --- NEW: Regex Validation Check ---
+        if (!validateUserInput(name, email, password)) {
+            return;
+        }
+
+        UserDTO user = new UserDTO(id, name, email, password);
+
+        try {
+            if (userModel.update(user, role)) {
+                new Alert(Alert.AlertType.INFORMATION, "User Updated!").show();
+                btnClearOnAction(event);
+                loadAllUsers();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Update Failed. ID may not exist.").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "SQL Error: " + e.getMessage()).show();
+        }
+    }
+
+    @FXML
+    void btnDeleteOnAction(ActionEvent event) {
+        String id = txtId.getText();
+
+        // --- NEW: ID Validation ---
+        if (id.isEmpty() || !id.matches("^\\d+$")) {
+            new Alert(Alert.AlertType.WARNING, "Enter a valid User ID to delete").show();
+            return;
+        }
+
+        try {
+            if (userModel.delete(id)) {
+                new Alert(Alert.AlertType.INFORMATION, "User Deleted!").show();
+                btnClearOnAction(event);
+                loadAllUsers();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Delete Failed. User Not Found.").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+        }
+    }
+
+    @FXML
+    void txtSearchOnAction(ActionEvent event) {
+        String id = txtId.getText();
+
+        // --- NEW: ID Validation for Search ---
+        if (id.isEmpty() || !id.matches("^\\d+$")) {
+            new Alert(Alert.AlertType.WARNING, "Enter valid numeric ID").show();
+            return;
+        }
+
+        try {
+            UserDTO user = userModel.search(id);
+            if (user != null) {
+                populateFields(user); // Reuse the helper method
+            } else {
+                new Alert(Alert.AlertType.WARNING, "User not found").show();
+                // Optional: clear fields if not found
+                // btnClearOnAction(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void btnClearOnAction(ActionEvent event) {
+        txtId.clear();
+        txtUsername.clear();
+        txtEmail.clear();
+        txtPassword.clear();
+        cmbRole.getSelectionModel().clearSelection();
+        tblUser.getSelectionModel().clearSelection(); // Clear table selection
+    }
+
+    // --- NEW: Validation Method (Regex) ---
+    private boolean validateUserInput(String username, String email, String password) {
+        // 1. Username: At least 3 chars, LETTERS ONLY (No Numbers)
+        // [A-Za-z ] means "Letters and Spaces" allowed.
+        if (!username.matches("[A-Za-z ]{3,}")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Username! Use letters only (A-Z).").show();
+            return false;
+        }
+
+        // 2. Email: Standard email pattern
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Email Address!").show();
+            return false;
+        }
+
+        // 3. Password: At least 4 chars (simple check)
+        if (!password.matches("^.{4,}$")) {
+            new Alert(Alert.AlertType.ERROR, "Password too short! Must be at least 4 characters.").show();
+            return false;
+        }
+
+        return true;
+    }
 }

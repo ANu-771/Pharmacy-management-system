@@ -1,8 +1,8 @@
 package lk.ijse.pharmacy.controller;
 
 import javafx.event.ActionEvent;
-
 import java.io.IOException;
+import java.sql.SQLException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lk.ijse.pharmacy.App;
+import lk.ijse.pharmacy.model.UserModel; // Import the Model
 
 public class LoginController {
 
@@ -19,40 +20,68 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    @FXML
-    private void btnLoginOnAction() throws IOException {
-        String realUsername = "isuru";
-        String realPassword = "123";
+    // Create an instance of the Model to handle DB operations
+    private UserModel userModel = new UserModel();
 
+    @FXML
+    private void btnLoginOnAction() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // UI Styles
         String defaultStyle = "-fx-border-color: #e2e8f0; -fx-border-radius: 5; -fx-background-color: #f8fafc;";
-        // Red border
         String errorStyle = "-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 5; -fx-background-color: #fff0f0;";
 
+        // Reset styles initially
         usernameField.setStyle(defaultStyle);
         passwordField.setStyle(defaultStyle);
 
-        boolean isError = false;
-
-        if (!username.equals(realUsername)) {
+        // Basic Validation: Check if empty
+        if (username.isEmpty()) {
             usernameField.setStyle(errorStyle);
             usernameField.requestFocus();
-            isError = true;
+            return;
         }
-
-        else if (!password.equals(realPassword)) {
+        if (password.isEmpty()) {
             passwordField.setStyle(errorStyle);
             passwordField.requestFocus();
-            isError = true;
+            return;
         }
 
-        if (isError) {
-            System.out.println("Invalid User Name or Password");
-        } else {
-            System.out.println("Logged - IN Successful.!");
-            App.setRoot("layout");
+        try {
+            // --- LOGIC CHANGE HERE ---
+
+            // Step A: Check if Username exists ONLY
+            boolean isUserFound = userModel.isUsernameExists(username);
+
+            if (!isUserFound) {
+                // Username is WRONG -> Red Username Field ONLY
+                usernameField.setStyle(errorStyle);
+                usernameField.requestFocus();
+                new Alert(Alert.AlertType.ERROR, "Username not found!").show();
+                return; // Stop here
+            }
+
+            // Step B: Check Password (Login)
+            String role = userModel.checkLogin(username, password);
+
+            if (role != null) {
+                // SUCCESS
+                System.out.println("Login Successful! Role: " + role);
+                App.setRoot("layout");
+            } else {
+                // User exists (Step A passed), so Password must be WRONG
+                // Red Password Field ONLY
+                passwordField.setStyle(errorStyle);
+                passwordField.requestFocus();
+                new Alert(Alert.AlertType.ERROR, "Incorrect Password!").show();
+            }
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Database Error: " + e.getMessage()).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -64,23 +93,15 @@ public class LoginController {
         alert.setContentText("Please contact the Shop Owner or the Software Company Administrator to reset your password.");
 
         try {
-
             Image image = new Image(getClass().getResourceAsStream("/image/pw locked.png"));
-
             ImageView imageView = new ImageView(image);
-
             imageView.setFitHeight(50);
             imageView.setFitWidth(50);
-
             alert.setGraphic(imageView);
-
-
         } catch (Exception e) {
             System.out.println("Icon image not found: " + e.getMessage());
         }
 
         alert.showAndWait();
     }
-
 }
-
