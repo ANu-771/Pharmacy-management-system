@@ -72,6 +72,21 @@ public class MedicineController {
         tblMedicine.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) populateFields(newVal);
         });
+
+        // --- NEW CODE: Restrict Price Input to Numbers & Decimal Only ---
+        txtPrice.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Regex: Allows only Digits (0-9) and a single optional Dot (.)
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                txtPrice.setText(oldValue); // If bad input, revert to old text
+            }
+        });
+
+        // --- OPTIONAL: Restrict Quantity to Integers Only (No Dots) ---
+        txtQty.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtQty.setText(oldValue);
+            }
+        });
     }
 
     @FXML
