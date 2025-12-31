@@ -219,8 +219,8 @@ public class UserController {
         }
 
         // 3. Password: At least 4 chars (simple check)
-        if (!password.matches("^.{4,}$")) {
-            new Alert(Alert.AlertType.ERROR, "Password too short! Must be at least 4 characters.").show();
+        if (!password.matches("^.{3,}$")) {
+            new Alert(Alert.AlertType.ERROR, "Password too short! Must be at least 3 characters.").show();
             return false;
         }
 

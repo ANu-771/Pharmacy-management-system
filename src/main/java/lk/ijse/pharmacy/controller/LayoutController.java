@@ -3,6 +3,7 @@ package lk.ijse.pharmacy.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -42,15 +43,21 @@ public class LayoutController {
     @FXML
     private Button btnUser;
 
+    private String userRole = "user";
+
+    public void setRole(String role) {
+        this.userRole = role;
+    }
+
     @FXML
     public void initialize() {
-       // loadDashboard();
+        // loadDashboard();
     }
 
     // 2. Helper Method to Handle Highlighting
     private void setButtonActive(Button activeButton) {
         // Reset all buttons to default style
-        Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnOrder, btnReport};
+        Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnOrder, btnReport, btnUser};
 
         for (Button btn : buttons) {
             // Remove the active class if it exists
@@ -127,6 +134,12 @@ public class LayoutController {
 
     @FXML
     private void loadReport(){
+        // If role is NOT "admin", show popup and STOP.
+        if (!"admin".equalsIgnoreCase(userRole)) {
+            new Alert(Alert.AlertType.WARNING, "Access Denied!\nOnly Admin can view Reports.").show();
+            return;
+        }
+
         setButtonActive(btnReport);
 
         try {
@@ -139,6 +152,12 @@ public class LayoutController {
 
     @FXML
     void loadUser(){
+        // If role is NOT "admin", show popup and STOP.
+        if (!"admin".equalsIgnoreCase(userRole)) {
+            new Alert(Alert.AlertType.WARNING, "Access Denied!\nOnly Admin can manage Users.").show();
+            return;
+        }
+
         setButtonActive(btnUser);
 
         try {
@@ -161,7 +180,13 @@ public class LayoutController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            App.setRoot("login");
+           // App.setRoot("login");
+            Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
+            // 2. Get the Current Stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            // 3. FIX: Update the EXISTING scene instead of creating a new one
+            // This prevents the window from resizing or exiting full screen
+            stage.getScene().setRoot(root);
         }
     }
 

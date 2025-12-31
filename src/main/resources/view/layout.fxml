@@ -48,9 +48,9 @@
 
             <Button fx:id="btnOrder" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadOrder" prefHeight="40.0" styleClass="nav-btn" text="Sales Order" />
 
-            <Button fx:id="btnReport" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadReport" prefHeight="40.0" styleClass="nav-btn" text="Reports" />
-
             <Button fx:id="btnUser" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadUser" prefHeight="40.0" styleClass="nav-btn" text="User Manage" />
+
+            <Button fx:id="btnReport" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadReport" prefHeight="40.0" styleClass="nav-btn" text="Reports" />
 
             <Region VBox.vgrow="ALWAYS" />
 

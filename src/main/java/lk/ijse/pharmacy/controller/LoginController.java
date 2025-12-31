@@ -4,11 +4,15 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import lk.ijse.pharmacy.App;
 import lk.ijse.pharmacy.model.UserModel; // Import the Model
 
@@ -68,7 +72,19 @@ public class LoginController {
             if (role != null) {
                 // SUCCESS
                 System.out.println("Login Successful! Role: " + role);
-                App.setRoot("layout");
+                // 1. Load the FXML manually
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/layout.fxml"));
+                Parent root = loader.load();
+
+                // 2. Get the Controller and PASS THE ROLE
+                LayoutController layoutController = loader.getController();
+                layoutController.setRole(role); // <--- THIS IS THE MISSING KEY!
+
+                // 3. Show the new screen
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+                stage.getScene().setRoot(root);
+                stage.centerOnScreen();
+                stage.show();
             } else {
                 // User exists (Step A passed), so Password must be WRONG
                 // Red Password Field ONLY
