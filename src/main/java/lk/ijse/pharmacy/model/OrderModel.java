@@ -112,7 +112,7 @@ public class OrderModel {
                 }
 
                 //COMMIT IF ALL SUCCESS
-                if (isDetailsSaved && isStockUpdated) {
+                if (isDetailsSaved && isStockUpdated && isPaymentSaved) {
                     // Commit Transaction
                     connection.commit();
                     return generatedOrderId; // SUCCESS: Return the ID
