@@ -351,7 +351,6 @@ public class MedicineController {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    // ----------------------------
                 });
 
                 suggestionsMenu.getItems().add(item);
