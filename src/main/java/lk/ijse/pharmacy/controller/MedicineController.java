@@ -123,7 +123,7 @@ public class MedicineController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String idText = txtId.getText(); // ID is required for Update
+        String idText = txtId.getText().trim(); // ID is required for Update
         if (idText.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Select a medicine to update!").show();
             return;
@@ -162,7 +162,7 @@ public class MedicineController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String idText = txtId.getText();
+        String idText = txtId.getText().trim();
         if (idText.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Select a medicine to delete!").show();
             return;

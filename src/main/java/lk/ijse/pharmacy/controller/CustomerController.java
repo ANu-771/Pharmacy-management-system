@@ -164,9 +164,9 @@ public class CustomerController {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String id = txtId.getText() == null ? "" : txtId.getText().trim();
-        String name = txtName.getText();
-        String contact = txtContact.getText();
-        String address = txtAddress.getText();
+        String name = txtName.getText().trim();
+        String contact = txtContact.getText().trim();
+        String address = txtAddress.getText().trim();
 
         if (!id.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();

@@ -79,8 +79,8 @@ public class UserController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String name = txtUsername.getText();
-        String email = txtEmail.getText();
+        String name = txtUsername.getText().trim();
+        String email = txtEmail.getText().trim();
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
@@ -112,7 +112,7 @@ public class UserController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String idText = txtId.getText();
+        String idText = txtId.getText().trim();
 
         // --- NEW: ID Validation ---
         if (idText.isEmpty() || !idText.matches("^\\d+$")) {
@@ -121,8 +121,8 @@ public class UserController {
         }
 
         int id = Integer.parseInt(idText);
-        String name = txtUsername.getText();
-        String email = txtEmail.getText();
+        String name = txtUsername.getText().trim();
+        String email = txtEmail.getText().trim();
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
@@ -148,7 +148,7 @@ public class UserController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtId.getText().trim();
 
         // --- NEW: ID Validation ---
         if (id.isEmpty() || !id.matches("^\\d+$")) {
@@ -171,7 +171,7 @@ public class UserController {
 
     @FXML
     void txtSearchOnAction(ActionEvent event) {
-        String id = txtId.getText();
+        String id = txtId.getText().trim();
 
         // --- NEW: ID Validation for Search ---
         if (id.isEmpty() || !id.matches("^\\d+$")) {

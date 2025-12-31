@@ -29,7 +29,7 @@ public class LoginController {
 
     @FXML
     private void btnLoginOnAction() {
-        String username = usernameField.getText();
+        String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
         // UI Styles
