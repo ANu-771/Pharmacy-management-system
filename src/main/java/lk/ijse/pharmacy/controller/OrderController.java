@@ -88,6 +88,15 @@ public class OrderController {
     @FXML
     private TextField txtQty;
 
+    @FXML
+    private ComboBox<String> cmbPaymentMethod;
+
+    @FXML
+    private TextField txtCash;
+
+    @FXML
+    private Label lblBalance;
+
     private OrderModel orderModel = new OrderModel();
     private CustomerModel customerModel = new CustomerModel();
     private MedicineModel medicineModel = new MedicineModel();
@@ -109,6 +118,7 @@ public class OrderController {
 
         loadMedicineNames();
         setupAutoSuggestion();
+        setupPaymentLogic();
     }
 
     private void setCellValueFactory() {
@@ -228,8 +238,6 @@ public class OrderController {
         }
 
 
-
-
         // qty enter krnld blnw
         String qtyText = txtQty.getText().trim();
         if (qtyText.isEmpty() || !qtyText.matches("\\d+") || Integer.parseInt(qtyText) <= 0) {
@@ -312,13 +320,33 @@ public class OrderController {
             return;
         }
 
+        // 2. Validate Payment Input
+        String paymentMethod = cmbPaymentMethod.getValue();
+        if (paymentMethod == null || paymentMethod.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a Payment Method!").show();
+            return;
+        }
+
+        // Optional: Ensure Cash amount is sufficient if method is 'Cash'
+        if ("Cash".equals(paymentMethod)) {
+            try {
+                double cash = Double.parseDouble(txtCash.getText());
+                if (cash < netTotal) {
+                    new Alert(Alert.AlertType.ERROR, "Insufficient Cash provided!").show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                new Alert(Alert.AlertType.ERROR, "Invalid Cash Amount!").show();
+                return;
+            }
+        }
+
 
         OrderDTO order = new OrderDTO(null, customerId, "1", netTotal, new Date());
-
         List<CartTM> cartData = new ArrayList<>(cartList);
 
         try {
-            String orderId = orderModel.placeOrder(order, cartData);
+            String orderId = orderModel.placeOrder(order, cartData, paymentMethod);
            // boolean isPlaced = orderModel.placeOrder(order, cartData);
 
             if (orderId != null) {
@@ -333,6 +361,9 @@ public class OrderController {
                 txtDescription.setText("");
                 lblQtyOnHand.setText("");
                 lblUnitPrice.setText("");
+                txtCash.clear();
+                lblBalance.setText("0.00");
+
             } else {
                 new Alert(Alert.AlertType.ERROR, "Order Failed!").show();
             }
@@ -394,6 +425,59 @@ public class OrderController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setupPaymentLogic() {
+        // 1. Populate Payment Methods
+        ObservableList<String> methods = FXCollections.observableArrayList("Cash", "Card");
+        cmbPaymentMethod.setItems(methods);
+        cmbPaymentMethod.setValue("Cash"); // Default to Cash
+
+        // 2. Real-time Balance Calculation
+        txtCash.textProperty().addListener((observable, oldValue, newValue) -> {
+            calculateBalance();
+        });
+
+        // 3. NEW: Lock/Unlock fields based on selection
+        cmbPaymentMethod.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if ("Card".equals(newValue)) {
+                // --- LOCK FIELDS ---
+                txtCash.setDisable(true);      // User cannot type
+                lblBalance.setDisable(true);   // Label goes gray
+
+                txtCash.clear();               // Remove any old numbers
+                lblBalance.setText("0.00");    // Reset balance
+            } else {
+                // --- UNLOCK FIELDS (Cash) ---
+                txtCash.setDisable(false);     // Enable typing
+                lblBalance.setDisable(false);  // Enable label
+
+                txtCash.requestFocus();        // Focus for quick typing
+            }
+        });
+    }
+
+    private void calculateBalance() {
+        try {
+            if (txtCash.getText().isEmpty()) {
+                lblBalance.setText("0.00");
+                return;
+            }
+            double cash = Double.parseDouble(txtCash.getText());
+            double balance = cash - netTotal;
+
+            lblBalance.setText(String.format("%.2f", balance));
+
+            // Red color if insufficient cash
+            if (balance < 0) {
+                lblBalance.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 18;");
+            } else {
+                lblBalance.setStyle("-fx-text-fill: #22c55e; -fx-font-weight: bold; -fx-font-size: 18;");
+            }
+
+        } catch (NumberFormatException e) {
+            lblBalance.setText("Invalid");
         }
     }
 

@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -151,8 +152,31 @@
                 </columnResizePolicy>
             </TableView>
 
-            <HBox alignment="CENTER_RIGHT" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
                 <children>
+                    <Label text="Method:" textFill="#475569">
+                        <font><Font name="System Bold" size="16.0" /></font>
+                    </Label>
+                    <ComboBox fx:id="cmbPaymentMethod" prefWidth="120.0" promptText="Select" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 2;" />
+
+                    <Label text="Cash:" textFill="#475569">
+                        <font><Font name="System Bold" size="16.0" /></font>
+                        <HBox.margin><Insets left="10.0" /></HBox.margin>
+                    </Label>
+                    <TextField fx:id="txtCash" promptText="Input Cash" prefWidth="150.0" style="-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8;">
+                        <font><Font size="14.0" /></font>
+                    </TextField>
+
+                    <Label text="Balance:" textFill="#475569">
+                        <font><Font name="System Bold" size="16.0" /></font>
+                        <HBox.margin><Insets left="10.0" /></HBox.margin>
+                    </Label>
+                    <Label fx:id="lblBalance" text="0.00" textFill="#22c55e">
+                        <font><Font name="System Bold" size="18.0" /></font>
+                    </Label>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
                     <Label text="Net Total:" textFill="#ef4444">
                         <font>
                             <Font name="System Bold" size="20.0" />

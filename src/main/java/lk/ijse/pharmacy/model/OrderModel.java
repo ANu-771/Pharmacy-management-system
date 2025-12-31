@@ -28,12 +28,11 @@ public class OrderModel {
     }
 
     //  THE TRANSACTION METHOD
-    public String placeOrder(OrderDTO order, List<CartTM> cartList) throws SQLException {
+    public String placeOrder(OrderDTO order, List<CartTM> cartList, String paymentMethod) throws SQLException {
         Connection connection = null;
         try {
             connection = DBConnection.getInstance().getConnection();
-
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false); // Start Transaction
 
 
             String sqlOrder = "INSERT INTO orders (customer_id, user_id, total, order_date, order_time) VALUES (?, ?, ?, ?, ?)";
@@ -69,7 +68,7 @@ public class OrderModel {
                     // insert ORDER DETAILS
                     String sqlDetail = "INSERT INTO order_medicine (order_id, medicine_id, qty, unit_price, line_total) VALUES (?, ?, ?, ?, ?)";
                     PreparedStatement pstmDetail = connection.prepareStatement(sqlDetail);
-                    //pstmDetail.setInt(1, orderId);
+
                     pstmDetail.setInt(1, Integer.parseInt(generatedOrderId));
                     pstmDetail.setInt(2, medicineId);
                     pstmDetail.setInt(3, qty);
@@ -92,8 +91,27 @@ public class OrderModel {
                         isStockUpdated = false;
                         break;
                     }
-
                 }
+
+                    //: SAVE PAYMENT
+                    boolean isPaymentSaved = true;
+                    if (isDetailsSaved && isStockUpdated) {
+
+                        String sqlPayment = "INSERT INTO payment (order_id, amount, payment_method, payment_date) VALUES (?, ?, ?, ?)";
+                        PreparedStatement pstmPayment = connection.prepareStatement(sqlPayment);
+
+                        pstmPayment.setInt(1, Integer.parseInt(generatedOrderId));
+                        pstmPayment.setDouble(2, order.getTotal()); // Saving the Bill Total
+                        pstmPayment.setString(3, paymentMethod);    // "Cash" or "Card"
+                        pstmPayment.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
+
+                        if (pstmPayment.executeUpdate() <= 0) {
+                            isPaymentSaved = false;
+
+                    }
+                }
+
+                //COMMIT IF ALL SUCCESS
                 if (isDetailsSaved && isStockUpdated) {
                     // Commit Transaction
                     connection.commit();
@@ -101,6 +119,7 @@ public class OrderModel {
                 }
             }
 
+            // Rollback if any step failed
             connection.rollback();
             return null; // FAIL: Return null
 
