@@ -243,6 +243,10 @@ public class MedicineController {
                         // EXPIRING SOON (Next 14 Days): Light Red / Pink
                         setStyle("-fx-background-color: #ffcdd2;");
                     }
+                    // Priority 3: LOW STOCK (Yellow)
+                    else if (item.getQtyInStock() <= 21) {
+                        setStyle("-fx-background-color: #fef08a; -fx-text-background-color: black;");
+                    }
                     else {
                         // NORMAL: Clear style
                         setStyle("");
@@ -291,7 +295,7 @@ public class MedicineController {
         }
     }
 
-    // 2. Setup the popup listener
+    // 2. Set up the popup listener
     private void setupAutoSuggestion() {
         ContextMenu suggestionsMenu = new ContextMenu();
 
