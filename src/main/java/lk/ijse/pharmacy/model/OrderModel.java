@@ -28,7 +28,7 @@ public class OrderModel {
     }
 
     //  THE TRANSACTION METHOD
-    public String placeOrder(OrderDTO order, List<CartTM> cartList, String paymentMethod) throws SQLException {
+    public String placeOrder(OrderDTO order, List<CartTM> cartList, String paymentMethod, double cashAmount) throws SQLException {
         Connection connection = null;
         try {
             connection = DBConnection.getInstance().getConnection();
@@ -101,7 +101,7 @@ public class OrderModel {
                     PreparedStatement pstmPayment = connection.prepareStatement(sqlPayment);
 
                     pstmPayment.setInt(1, Integer.parseInt(generatedOrderId));
-                    pstmPayment.setDouble(2, order.getTotal());
+                    pstmPayment.setDouble(2, cashAmount);
                     pstmPayment.setString(3, paymentMethod);
                     pstmPayment.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
 

@@ -349,13 +349,36 @@ public class OrderController {
         OrderDTO order = new OrderDTO(null, customerId, "1", netTotal, new Date());
         List<CartTM> cartData = new ArrayList<>(cartList);
 
+        double cashAmount = 0.0;
+        if ("Cash".equals(paymentMethod)) {
+            try {
+                cashAmount = Double.parseDouble(txtCash.getText());
+            } catch (NumberFormatException e) {
+                cashAmount = netTotal;
+            }
+        } else {
+            cashAmount = netTotal;
+        }
+
+
         try {
-            String orderId = orderModel.placeOrder(order, cartData, paymentMethod);
+            String orderId = orderModel.placeOrder(order, cartData, paymentMethod, cashAmount);
             // boolean isPlaced = orderModel.placeOrder(order, cartData);
 
             if (orderId != null) {
                 new Alert(Alert.AlertType.INFORMATION, "Order Placed Successfully!").show();
-                printBill(Integer.parseInt(orderId));
+
+                double balance = 0.0;
+                if ("Cash".equals(paymentMethod)) {
+                    try {
+                        double cash = Double.parseDouble(txtCash.getText());
+                        balance = cash - netTotal;
+                    } catch (NumberFormatException e) {
+                        balance = 0.0;
+                    }
+                }
+
+                printBill(Integer.parseInt(orderId), balance);
 
                 cartList.clear();
                 calculateNetTotal();
@@ -365,8 +388,13 @@ public class OrderController {
                 txtDescription.setText("");
                 lblQtyOnHand.setText("");
                 lblUnitPrice.setText("");
+                txtQty.clear();
                 txtCash.clear();
                 lblBalance.setText("0.00");
+
+                cmbCustomerId.getSelectionModel().clearSelection();
+                cmbCustomerId.setValue(null);
+                lblCustomerName.setText("");
 
             } else {
                 new Alert(Alert.AlertType.ERROR, "Order Failed!").show();
@@ -376,7 +404,7 @@ public class OrderController {
         }
     }
 
-    private void printBill(int orderId) {
+    private void printBill(int orderId, double balance) {
         try {
             InputStream reportStream = getClass().getResourceAsStream("/report/bill.jrxml");
 
@@ -385,9 +413,10 @@ public class OrderController {
                 return;
             }
 
-            // Map the Order ID parameter
+            // Map parameters
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("p_order_id", orderId);
+            parameters.put("p_balance", balance);
 
             // Fill
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
