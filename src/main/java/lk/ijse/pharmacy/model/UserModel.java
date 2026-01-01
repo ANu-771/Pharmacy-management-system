@@ -99,12 +99,10 @@ public class UserModel {
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, id);
         ResultSet resultSet = pstm.executeQuery();
-        if(resultSet.next()) return resultSet.getString("role");
+        if (resultSet.next()) return resultSet.getString("role");
         return null;
     }
 
-    // --- LOGIN LOGIC ---
-    // Returns the User's Role if login success, or null if failed
     public String checkLogin(String username, String password) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT role FROM user WHERE username = ? AND password = ?";
@@ -114,12 +112,11 @@ public class UserModel {
 
         ResultSet resultSet = pstm.executeQuery();
         if (resultSet.next()) {
-            return resultSet.getString("role"); // Return "admin" or "employee"
+            return resultSet.getString("role");
         }
         return null; // Login Failed
     }
 
-    // Add this method inside your UserModel class
     public boolean isUsernameExists(String username) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT username FROM user WHERE username = ?";

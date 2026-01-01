@@ -21,7 +21,7 @@ public class OrderModel {
     }
 
     private String splitOrderId(String currentId) {
-        if(currentId != null) {
+        if (currentId != null) {
             return String.valueOf(Integer.parseInt(currentId) + 1);
         }
         return "1";
@@ -32,7 +32,7 @@ public class OrderModel {
         Connection connection = null;
         try {
             connection = DBConnection.getInstance().getConnection();
-            connection.setAutoCommit(false); // Start Transaction
+            connection.setAutoCommit(false);
 
 
             String sqlOrder = "INSERT INTO orders (customer_id, user_id, total, order_date, order_time) VALUES (?, ?, ?, ?, ?)";
@@ -42,7 +42,7 @@ public class OrderModel {
             pstmOrder.setDouble(3, order.getTotal());
             pstmOrder.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
 
-            // 2. SET TIME: Explicitly set the time from Java (Local Time)
+            // SET TIME set the time from Java
             pstmOrder.setTime(5, new java.sql.Time(order.getOrderDate().getTime()));
 
             boolean isOrderSaved = pstmOrder.executeUpdate() > 0;
@@ -93,20 +93,20 @@ public class OrderModel {
                     }
                 }
 
-                    //: SAVE PAYMENT
-                    boolean isPaymentSaved = true;
-                    if (isDetailsSaved && isStockUpdated) {
+                //: SAVE PAYMENT
+                boolean isPaymentSaved = true;
+                if (isDetailsSaved && isStockUpdated) {
 
-                        String sqlPayment = "INSERT INTO payment (order_id, amount, payment_method, payment_date) VALUES (?, ?, ?, ?)";
-                        PreparedStatement pstmPayment = connection.prepareStatement(sqlPayment);
+                    String sqlPayment = "INSERT INTO payment (order_id, amount, payment_method, payment_date) VALUES (?, ?, ?, ?)";
+                    PreparedStatement pstmPayment = connection.prepareStatement(sqlPayment);
 
-                        pstmPayment.setInt(1, Integer.parseInt(generatedOrderId));
-                        pstmPayment.setDouble(2, order.getTotal()); // Saving the Bill Total
-                        pstmPayment.setString(3, paymentMethod);    // "Cash" or "Card"
-                        pstmPayment.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
+                    pstmPayment.setInt(1, Integer.parseInt(generatedOrderId));
+                    pstmPayment.setDouble(2, order.getTotal());
+                    pstmPayment.setString(3, paymentMethod);
+                    pstmPayment.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
 
-                        if (pstmPayment.executeUpdate() <= 0) {
-                            isPaymentSaved = false;
+                    if (pstmPayment.executeUpdate() <= 0) {
+                        isPaymentSaved = false;
 
                     }
                 }
@@ -115,7 +115,7 @@ public class OrderModel {
                 if (isDetailsSaved && isStockUpdated && isPaymentSaved) {
                     // Commit Transaction
                     connection.commit();
-                    return generatedOrderId; // SUCCESS: Return the ID
+                    return generatedOrderId;
                 }
             }
 
