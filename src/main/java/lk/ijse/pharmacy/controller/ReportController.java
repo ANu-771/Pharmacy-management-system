@@ -12,13 +12,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.model.DashboardModel;
+import lk.ijse.pharmacy.dto.tm.ReportTM;
+import lk.ijse.pharmacy.model.ReportModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ReportController {
@@ -35,7 +40,6 @@ public class ReportController {
     @FXML
     private Label lblItemsSold;
 
-    // --- Table Injection ---
     @FXML
     private TableView<ReportTM> tblReportDetails;
 
@@ -52,10 +56,11 @@ public class ReportController {
     private TableColumn<ReportTM, Double> colTotal;
 
     private DashboardModel dashboardModel = new DashboardModel();
+    private ReportModel reportModel = new ReportModel();
 
     @FXML
     public void initialize() {
-        // 1. Initialize ComboBox (Removed "Bill (Sales) Report")
+        //Initialize ComboBox
         ObservableList<String> reportTypes = FXCollections.observableArrayList(
                 "Customer Report",
                 "Supplier Report",
@@ -63,82 +68,47 @@ public class ReportController {
         );
         cmbReportType.setItems(reportTypes);
 
-        // 2. Setup Table Columns
+        // Setup Table Columns
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         colCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-        // 3. Load Data
+        // Load Data
         loadSummaryLabels();
         loadTableData();
+
+        // double click show bill from table
+        tblReportDetails.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && !tblReportDetails.getSelectionModel().isEmpty()) {
+                ReportTM selectedItem = tblReportDetails.getSelectionModel().getSelectedItem();
+
+                int orderId = Integer.parseInt(selectedItem.getOrderId());
+                double total = selectedItem.getTotal();
+
+                printBillFromReport(orderId, total);
+            }
+        });
     }
 
     private void loadSummaryLabels() {
         try {
-            // Existing: Today's Income
-            double todayIncome = dashboardModel.getTodayIncome();
-            lblTotalSales.setText(String.format("Rs. %.2f", todayIncome));
+            lblTotalSales.setText(String.format("Rs. %.2f", dashboardModel.getTodayIncome()));
 
-            // NEW: Total Orders Count
-            int totalOrders = getTotalOrders();
-            lblTotalOrders.setText(String.valueOf(totalOrders));
-
-            // NEW: Total Items Sold
-            int itemsSold = getItemsSold();
-            lblItemsSold.setText(String.valueOf(itemsSold));
+            // Call Model instead of SQL
+            lblTotalOrders.setText(String.valueOf(reportModel.getTotalOrders()));
+            lblItemsSold.setText(String.valueOf(reportModel.getItemsSold()));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // --- NEW METHOD: Get Total Orders Count ---
-    private int getTotalOrders() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM orders";
-        Connection connection = DBConnection.getInstance().getConnection();
-        ResultSet resultSet = connection.createStatement().executeQuery(sql);
-        if (resultSet.next()) {
-            return resultSet.getInt(1);
-        }
-        return 0;
-    }
-
-    // --- NEW METHOD: Get Total Items Sold ---
-    private int getItemsSold() throws SQLException {
-        String sql = "SELECT SUM(qty) FROM order_medicine";
-        Connection connection = DBConnection.getInstance().getConnection();
-        ResultSet resultSet = connection.createStatement().executeQuery(sql);
-        if (resultSet.next()) {
-            return resultSet.getInt(1);
-        }
-        return 0;
-    }
-
     private void loadTableData() {
-        ObservableList<ReportTM> list = FXCollections.observableArrayList();
-
-        // Sorted by Date DESC and Order ID DESC
-        String sql = "SELECT o.order_id, c.name, o.order_date, o.total " +
-                "FROM orders o " +
-                "JOIN customer c ON o.customer_id = c.customer_id " +
-                "ORDER BY o.order_date DESC, o.order_id DESC";
-
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
-            ResultSet resultSet = connection.createStatement().executeQuery(sql);
-
-            while (resultSet.next()) {
-                list.add(new ReportTM(
-                        resultSet.getString("order_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("order_date"),
-                        resultSet.getDouble("total")
-                ));
-            }
-
-            tblReportDetails.setItems(list);
-
+            // Call Model to get the list
+            List<ReportTM> orders = reportModel.getAllOrderDetails();
+            tblReportDetails.setItems(FXCollections.observableArrayList(orders));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -166,8 +136,6 @@ public class ReportController {
                 viewReport("stock.jrxml", null);
                 break;
 
-            // Removed "Bill (Sales) Report" case
-
             default:
                 new Alert(Alert.AlertType.ERROR, "Invalid Selection").show();
         }
@@ -190,23 +158,31 @@ public class ReportController {
         }
     }
 
-    // --- Inner Class for Table Model (TM) ---
-    public static class ReportTM {
-        private String orderId;
-        private String customerName;
-        private String date;
-        private Double total;
+    private void printBillFromReport(int orderId, double orderTotal) {
+        try {
+            // Call Model to get paid amount
+            double paidAmount = reportModel.getPaidAmount(orderId);
+            double balance = paidAmount - orderTotal;
 
-        public ReportTM(String orderId, String customerName, String date, Double total) {
-            this.orderId = orderId;
-            this.customerName = customerName;
-            this.date = date;
-            this.total = total;
+            InputStream reportStream = getClass().getResourceAsStream("/report/bill.jrxml");
+            if (reportStream == null) {
+                new Alert(Alert.AlertType.ERROR, "Bill report file not found!").show();
+                return;
+            }
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("p_order_id", orderId);
+            parameters.put("p_balance", balance);
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+            Connection connection = DBConnection.getInstance().getConnection();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+
+            JasperViewer.viewReport(jasperPrint, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error printing bill: " + e.getMessage()).show();
         }
-
-        public String getOrderId() { return orderId; }
-        public String getCustomerName() { return customerName; }
-        public String getDate() { return date; }
-        public Double getTotal() { return total; }
     }
 }

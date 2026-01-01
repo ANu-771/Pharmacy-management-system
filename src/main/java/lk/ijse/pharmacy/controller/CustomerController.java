@@ -39,13 +39,13 @@ public class CustomerController {
     @FXML
     private TableView<CustomerDTO> tblCustomer;
     @FXML
-    private TableColumn<CustomerDTO,Integer> colId;
+    private TableColumn<CustomerDTO, Integer> colId;
     @FXML
-    private TableColumn<CustomerDTO,String> colName;
+    private TableColumn<CustomerDTO, String> colName;
     @FXML
-    private TableColumn<CustomerDTO,String> colContact;
+    private TableColumn<CustomerDTO, String> colContact;
     @FXML
-    private TableColumn<CustomerDTO,String> colAddress;
+    private TableColumn<CustomerDTO, String> colAddress;
 
     CustomerModel customerModel = new CustomerModel();
     ObservableList<CustomerDTO> customerList = FXCollections.observableArrayList();
@@ -63,12 +63,11 @@ public class CustomerController {
         colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 
-        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 populateFields(newValue);
             }
         });
-
 
 
     }
@@ -111,8 +110,8 @@ public class CustomerController {
         String address = txtAddress.getText() == null ? "" : txtAddress.getText().trim();
 
 
-        if(name.isEmpty() || contact.isEmpty() || address.isEmpty()){
-            new Alert(Alert.AlertType.INFORMATION,"Please fill all the fields").show();
+        if (name.isEmpty() || contact.isEmpty() || address.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Please fill all the fields").show();
             return;
         }
 
@@ -227,7 +226,7 @@ public class CustomerController {
     }
 
     private void populateFields(CustomerDTO customerDTO) {
-        
+
         txtId.setText(String.valueOf(customerDTO.getCustomerId()));
         txtName.setText(customerDTO.getName());
         txtContact.setText(customerDTO.getContact());

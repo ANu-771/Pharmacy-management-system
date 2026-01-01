@@ -1,8 +1,10 @@
 package lk.ijse.pharmacy.controller;
 
 import javafx.event.ActionEvent;
+
 import java.io.IOException;
 import java.sql.SQLException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import lk.ijse.pharmacy.App;
-import lk.ijse.pharmacy.model.UserModel; // Import the Model
+import lk.ijse.pharmacy.model.UserModel;
 
 public class LoginController {
 
@@ -40,7 +42,7 @@ public class LoginController {
         usernameField.setStyle(defaultStyle);
         passwordField.setStyle(defaultStyle);
 
-        // Basic Validation: Check if empty
+        // Basic Validation
         if (username.isEmpty()) {
             usernameField.setStyle(errorStyle);
             usernameField.requestFocus();
@@ -53,41 +55,40 @@ public class LoginController {
         }
 
         try {
-            // --- LOGIC CHANGE HERE ---
-
-            // Step A: Check if Username exists ONLY
+            // Check if Username exists ONLY
             boolean isUserFound = userModel.isUsernameExists(username);
 
             if (!isUserFound) {
-                // Username is WRONG -> Red Username Field ONLY
+                // Red Username Field ONLY
                 usernameField.setStyle(errorStyle);
                 usernameField.requestFocus();
                 new Alert(Alert.AlertType.ERROR, "Username not found!").show();
                 return; // Stop here
             }
 
-            // Step B: Check Password (Login)
+            //Check Password
             String role = userModel.checkLogin(username, password);
 
             if (role != null) {
                 // SUCCESS
                 System.out.println("Login Successful! Role: " + role);
-                // 1. Load the FXML manually
+                //Load the FXML
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/layout.fxml"));
                 Parent root = loader.load();
 
-                // 2. Get the Controller and PASS THE ROLE
+                //Get the Controller and PASS THE ROLE
                 LayoutController layoutController = loader.getController();
-                layoutController.setRole(role); // <--- THIS IS THE MISSING KEY!
+                layoutController.setRole(role);
 
-                // 3. Show the new screen
+                // Show the new screen
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 stage.getScene().setRoot(root);
                 stage.centerOnScreen();
                 stage.show();
+
             } else {
-                // User exists (Step A passed), so Password must be WRONG
-                // Red Password Field ONLY
+                // User exists, so Password must be WRONG
+                // Red Password Field
                 passwordField.setStyle(errorStyle);
                 passwordField.requestFocus();
                 new Alert(Alert.AlertType.ERROR, "Incorrect Password!").show();

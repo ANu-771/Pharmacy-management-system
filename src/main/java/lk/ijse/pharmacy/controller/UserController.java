@@ -6,8 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode; // --- NEW ---
-import javafx.scene.input.KeyEvent; // --- NEW ---
 import lk.ijse.pharmacy.dto.UserDTO;
 import lk.ijse.pharmacy.model.UserModel;
 
@@ -16,17 +14,27 @@ import java.util.List;
 
 public class UserController {
 
-    @FXML private TextField txtId;
-    @FXML private TextField txtUsername;
-    @FXML private TextField txtEmail;
-    @FXML private TextField txtPassword;
-    @FXML private ComboBox<String> cmbRole;
+    @FXML
+    private TextField txtId;
+    @FXML
+    private TextField txtUsername;
+    @FXML
+    private TextField txtEmail;
+    @FXML
+    private TextField txtPassword;
+    @FXML
+    private ComboBox<String> cmbRole;
 
-    @FXML private TableView<UserDTO> tblUser;
-    @FXML private TableColumn<UserDTO, Integer> colId;
-    @FXML private TableColumn<UserDTO, String> colName;
-    @FXML private TableColumn<UserDTO, String> colEmail;
-    @FXML private TableColumn<UserDTO, String> colRole;
+    @FXML
+    private TableView<UserDTO> tblUser;
+    @FXML
+    private TableColumn<UserDTO, Integer> colId;
+    @FXML
+    private TableColumn<UserDTO, String> colName;
+    @FXML
+    private TableColumn<UserDTO, String> colEmail;
+    @FXML
+    private TableColumn<UserDTO, String> colRole;
 
     private UserModel userModel = new UserModel();
 
@@ -42,7 +50,7 @@ public class UserController {
 
         loadAllUsers();
 
-        // --- NEW: Table Selection Listener (Click row -> Fill fields) ---
+        // Table Selection
         tblUser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 populateFields(newValue);
@@ -50,21 +58,13 @@ public class UserController {
         });
     }
 
-    // --- NEW: Helper method to fill fields from a UserDTO ---
+    // method to fill fields
     private void populateFields(UserDTO user) {
         txtId.setText(String.valueOf(user.getUserId()));
         txtUsername.setText(user.getUsername());
         txtEmail.setText(user.getEmail());
         txtPassword.setText(user.getPassword());
         cmbRole.setValue(user.getRole());
-    }
-
-    // --- NEW: Search by pressing ENTER key on ID field ---
-    @FXML
-    private void handlePressEnter(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            txtSearchOnAction(new ActionEvent());
-        }
     }
 
     private void loadAllUsers() {
@@ -84,15 +84,15 @@ public class UserController {
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
-        // --- NEW: Basic Empty Check ---
+        // Empty Check
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || role == null) {
             new Alert(Alert.AlertType.WARNING, "Please fill all fields!").show();
             return;
         }
 
-        // --- NEW: Regex Validation Check ---
+        // Regex Validation
         if (!validateUserInput(name, email, password)) {
-            return; // Stop if validation fails
+            return;
         }
 
         UserDTO user = new UserDTO(0, name, email, password);
@@ -114,7 +114,7 @@ public class UserController {
     void btnUpdateOnAction(ActionEvent event) {
         String idText = txtId.getText().trim();
 
-        // --- NEW: ID Validation ---
+        // ID Validation
         if (idText.isEmpty() || !idText.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Please enter a valid User ID!").show();
             return;
@@ -126,7 +126,7 @@ public class UserController {
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
-        // --- NEW: Regex Validation Check ---
+        // Regex Validation Check
         if (!validateUserInput(name, email, password)) {
             return;
         }
@@ -150,7 +150,7 @@ public class UserController {
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText().trim();
 
-        // --- NEW: ID Validation ---
+        // ID Validation
         if (id.isEmpty() || !id.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Enter a valid User ID to delete").show();
             return;
@@ -173,7 +173,7 @@ public class UserController {
     void txtSearchOnAction(ActionEvent event) {
         String id = txtId.getText().trim();
 
-        // --- NEW: ID Validation for Search ---
+        //ID Validation for Search
         if (id.isEmpty() || !id.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Enter valid numeric ID").show();
             return;
@@ -182,11 +182,10 @@ public class UserController {
         try {
             UserDTO user = userModel.search(id);
             if (user != null) {
-                populateFields(user); // Reuse the helper method
+                populateFields(user);
             } else {
                 new Alert(Alert.AlertType.WARNING, "User not found").show();
-                // Optional: clear fields if not found
-                // btnClearOnAction(event);
+                btnClearOnAction(event);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -200,25 +199,21 @@ public class UserController {
         txtEmail.clear();
         txtPassword.clear();
         cmbRole.getSelectionModel().clearSelection();
-        tblUser.getSelectionModel().clearSelection(); // Clear table selection
+        tblUser.getSelectionModel().clearSelection();
     }
 
-    // --- NEW: Validation Method (Regex) ---
+    //  Validation Method (Regex)
     private boolean validateUserInput(String username, String email, String password) {
-        // 1. Username: At least 3 chars, LETTERS ONLY (No Numbers)
-        // [A-Za-z ] means "Letters and Spaces" allowed.
         if (!username.matches("[A-Za-z ]{3,}")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Username! Use letters only (A-Z).").show();
             return false;
         }
 
-        // 2. Email: Standard email pattern
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid Email Address!").show();
             return false;
         }
 
-        // 3. Password: At least 4 chars (simple check)
         if (!password.matches("^.{3,}$")) {
             new Alert(Alert.AlertType.ERROR, "Password too short! Must be at least 3 characters.").show();
             return false;

@@ -76,10 +76,10 @@ public class DashboardController {
 
             Map<String, Double> trends = dashboardModel.getIncomeTrends();
 
-            //
+
             Map<String, Double> sortedTrends = new TreeMap<>(trends);
-            //use tre map bz hashmap mix the data tree map give corectly sortded data for chat
-            //
+            //use tree map bz hashmap mix the data tree map give corectly sortded data for chat
+
 
             for (Map.Entry<String, Double> entry : sortedTrends.entrySet()) {
                 series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));

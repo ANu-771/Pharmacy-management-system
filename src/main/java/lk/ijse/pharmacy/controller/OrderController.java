@@ -25,12 +25,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
+
 import java.util.stream.Collectors;
+
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
+
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -212,29 +216,29 @@ public class OrderController {
             return;
         }
 
-        // --- EXPIRY DATE VALIDATION ---
+        // exp date validate and check
         try {
             // Convert DTO Date to LocalDate
             java.time.LocalDate expDate = new java.sql.Date(selectedMedicine.getExpDate().getTime()).toLocalDate();
             java.time.LocalDate today = java.time.LocalDate.now();
 
-            // Check 1: Is it already expired?
+            // Is it already expired?
             if (expDate.isBefore(today)) {
                 new Alert(Alert.AlertType.ERROR,
                         "Cannot Sell! This medicine EXPIRED on: " + expDate).show();
                 return; // Stop here
             }
 
-            // Check 2: Is it expiring soon? (e.g., within next 21 days)
+            //Is it expiring soon.
             if (expDate.isBefore(today.plusDays(21))) {
                 new Alert(Alert.AlertType.WARNING,
                         "Warning! Medicine expires soon (" + expDate + "). Cannot add to bill.").show();
-                return; // Stop here
+                return;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return; // Stop if date conversion fails
+            return;
         }
 
 
@@ -320,14 +324,14 @@ public class OrderController {
             return;
         }
 
-        // 2. Validate Payment Input
+        // Validate Payment Input
         String paymentMethod = cmbPaymentMethod.getValue();
         if (paymentMethod == null || paymentMethod.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Please select a Payment Method!").show();
             return;
         }
 
-        // Optional: Ensure Cash amount is sufficient if method is 'Cash'
+        //Ensure Cash amount is sufficient.
         if ("Cash".equals(paymentMethod)) {
             try {
                 double cash = Double.parseDouble(txtCash.getText());
@@ -347,7 +351,7 @@ public class OrderController {
 
         try {
             String orderId = orderModel.placeOrder(order, cartData, paymentMethod);
-           // boolean isPlaced = orderModel.placeOrder(order, cartData);
+            // boolean isPlaced = orderModel.placeOrder(order, cartData);
 
             if (orderId != null) {
                 new Alert(Alert.AlertType.INFORMATION, "Order Placed Successfully!").show();
@@ -374,7 +378,6 @@ public class OrderController {
 
     private void printBill(int orderId) {
         try {
-            // Make sure "bill.jrxml" matches the filename in src/main/resources/report/
             InputStream reportStream = getClass().getResourceAsStream("/report/bill.jrxml");
 
             if (reportStream == null) {
@@ -382,16 +385,16 @@ public class OrderController {
                 return;
             }
 
-            // 1. Map the Order ID parameter
+            // Map the Order ID parameter
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("p_order_id", orderId);
 
-            // 2. Compile and Fill
+            // Fill
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
             Connection connection = DBConnection.getInstance().getConnection();
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
 
-            // 3. View the Report (false = don't exit app on close)
+            //View the Report (false = don't exit app on close)
             JasperViewer.viewReport(jasperPrint, false);
 
         } catch (Exception e) {
@@ -411,7 +414,7 @@ public class OrderController {
             if (medicine != null) {
                 selectedMedicine = medicine;
 
-                // If found, auto-select the ID in the ComboBox
+                //  auto-select the ID in the ComboBox
                 cmbMedicineId.setValue(String.valueOf(medicine.getMedicineId()));
 
                 // Fill other details
@@ -429,27 +432,25 @@ public class OrderController {
     }
 
     private void setupPaymentLogic() {
-        // 1. Populate Payment Methods
+        // Populate Payment Methods
         ObservableList<String> methods = FXCollections.observableArrayList("Cash", "Card");
         cmbPaymentMethod.setItems(methods);
         cmbPaymentMethod.setValue("Cash"); // Default to Cash
 
-        // 2. Real-time Balance Calculation
+        //  Realtime Balance Calculate
         txtCash.textProperty().addListener((observable, oldValue, newValue) -> {
             calculateBalance();
         });
 
-        // 3. NEW: Lock/Unlock fields based on selection
+        // Lock/Unlock fields based on selection
         cmbPaymentMethod.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Card".equals(newValue)) {
-                // --- LOCK FIELDS ---
                 txtCash.setDisable(true);      // User cannot type
                 lblBalance.setDisable(true);   // Label goes gray
 
                 txtCash.clear();               // Remove any old numbers
                 lblBalance.setText("0.00");    // Reset balance
             } else {
-                // --- UNLOCK FIELDS (Cash) ---
                 txtCash.setDisable(false);     // Enable typing
                 lblBalance.setDisable(false);  // Enable label
 
@@ -481,7 +482,7 @@ public class OrderController {
         }
     }
 
-    // 1. Loads all medicine names into our list
+    // Loads all medicine names into our list
     private void loadMedicineNames() {
         try {
             List<MedicineDTO> allMedicines = medicineModel.getAll();
@@ -494,7 +495,7 @@ public class OrderController {
         }
     }
 
-    // 2. Sets up the "Live Filter" popup
+    // Filter popup
     private void setupAutoSuggestion() {
         ContextMenu suggestionsMenu = new ContextMenu();
 
@@ -505,7 +506,7 @@ public class OrderController {
                 return;
             }
 
-            // Filter the list: Find names that contain the typed letters (Ignore Case)
+            //  Find names that contain the typed letters (Ignore Case)
             List<String> matches = allMedicineNames.stream()
                     .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
                     .collect(Collectors.toList());
@@ -521,7 +522,7 @@ public class OrderController {
             for (String match : matches) {
                 MenuItem item = new MenuItem(match);
 
-                // Action: When user clicks a name from the list
+                //  When user clicks a name from the list
                 item.setOnAction(event -> {
                     txtDescription.setText(match);
                     suggestionsMenu.hide();
@@ -539,7 +540,7 @@ public class OrderController {
             }
         });
 
-        // Optional: Hide menu if user clicks away
+        //  Hide menu if user clicks away
         txtDescription.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) suggestionsMenu.hide();
         });

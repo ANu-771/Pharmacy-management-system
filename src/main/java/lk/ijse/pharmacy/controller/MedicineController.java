@@ -15,12 +15,15 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javafx.scene.control.TableRow;
 
 public class MedicineController {
@@ -53,35 +56,35 @@ public class MedicineController {
     private TableView<MedicineDTO> tblMedicine;
 
     @FXML
-    private TextField txtBrand, txtId,txtName, txtPrice, txtQty;
-
+    private TextField txtBrand, txtId, txtName, txtPrice, txtQty;
 
 
     private MedicineModel medicineModel = new MedicineModel();
     private ObservableList<MedicineDTO> medicineList = FXCollections.observableArrayList();
     private List<String> allMedicineNames = new ArrayList<>();
 
+
     @FXML
     private void initialize() {
         loadAllMedicines();
         setupTable();
 
-        loadMedicineNames();    // 1. Load names into memory
+        loadMedicineNames();    // Load names into memory
         setupAutoSuggestion();
 
         tblMedicine.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) populateFields(newVal);
         });
 
-        // --- NEW CODE: Restrict Price Input to Numbers & Decimal Only ---
+        //Restrict Price Input to Numbers & Decimal Only
         txtPrice.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Regex: Allows only Digits (0-9) and a single optional Dot (.)
+            // Allows only Digits (0-9) and Dot
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                txtPrice.setText(oldValue); // If bad input, revert to old text
+                txtPrice.setText(oldValue);
             }
         });
 
-        // --- OPTIONAL: Restrict Quantity to Integers Only (No Dots) ---
+        // Restrict Quantity to Integers Only
         txtQty.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 txtQty.setText(oldValue);
@@ -123,7 +126,7 @@ public class MedicineController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String idText = txtId.getText().trim(); // ID is required for Update
+        String idText = txtId.getText().trim();
         if (idText.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Select a medicine to update!").show();
             return;
@@ -188,7 +191,7 @@ public class MedicineController {
             MedicineDTO medicineDTO = null;
 
             try {
-                // 1. Check if ID field is not empty -> Search by ID
+                //Check if ID field is not empty -Search by ID
                 if (!idText.isEmpty()) {
                     if (idText.matches("^\\d+$")) {
                         medicineDTO = medicineModel.search(Integer.parseInt(idText));
@@ -197,17 +200,17 @@ public class MedicineController {
                         return;
                     }
                 }
-                // 2. If ID is empty, check Name field -> Search by Name
+                // If ID is empty,Search by Name
                 else if (!nameText.isEmpty()) {
                     medicineDTO = medicineModel.searchByName(nameText);
                 }
-                // 3. If both are empty
+                //If both are empty
                 else {
                     new Alert(Alert.AlertType.WARNING, "Please enter an ID or Name to search!").show();
                     return;
                 }
 
-                // 4. Process Result
+                //Process Result
                 if (medicineDTO != null) {
                     populateFields(medicineDTO);
                 } else {
@@ -222,10 +225,6 @@ public class MedicineController {
     }
 
 
-
-
-
-
     private void setupTable() {
         tblMedicine.setItems(medicineList);
         colId.setCellValueFactory(new PropertyValueFactory<>("medicineId"));
@@ -236,7 +235,7 @@ public class MedicineController {
         colQty.setCellValueFactory(new PropertyValueFactory<>("qtyInStock"));
 
 
-        // --- NEW CODE: Highlight Rows based on Expiry Date ---
+        // Highlight Rows based on Expiry Date
         tblMedicine.setRowFactory(tv -> new TableRow<MedicineDTO>() {
             @Override
             protected void updateItem(MedicineDTO item, boolean empty) {
@@ -245,25 +244,23 @@ public class MedicineController {
                 if (item == null || empty || item.getExpDate() == null) {
                     setStyle(""); // Reset style for empty rows
                 } else {
-                    // 1. Convert Date to LocalDate
+                    // Convert Date to LocalDate
                     java.time.LocalDate expDate = new java.sql.Date(item.getExpDate().getTime()).toLocalDate();
                     java.time.LocalDate today = java.time.LocalDate.now();
 
-                    // 2. Check Conditions
+                    // Check Conditions
                     if (expDate.isBefore(today)) {
-                        // EXPIRED: Deep Red
+                        // Deep Red
                         setStyle("-fx-background-color: #ff9999; -fx-text-background-color: white;");
-                    }
-                    else if (expDate.isBefore(today.plusDays(21))) {
-                        // EXPIRING SOON (Next 14 Days): Light Red / Pink
+                    } else if (expDate.isBefore(today.plusDays(21))) {
+                        // EXPIRING SOON (Next 21 Days): Light Red
                         setStyle("-fx-background-color: #ffcdd2;");
                     }
-                    // Priority 3: LOW STOCK (Yellow)
+                    // LOW STOCK (Yellow)
                     else if (item.getQtyInStock() <= 21) {
                         setStyle("-fx-background-color: #fef08a; -fx-text-background-color: black;");
-                    }
-                    else {
-                        // NORMAL: Clear style
+                    } else {
+                        // Clear style
                         setStyle("");
                     }
                 }
@@ -279,7 +276,9 @@ public class MedicineController {
             // Refresh the suggestions list whenever table reloads
             loadMedicineNames();
 
-        } catch (SQLException | ClassNotFoundException e) { e.printStackTrace(); }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean validateInput(String price, String qty) {
@@ -297,7 +296,7 @@ public class MedicineController {
         }
     }
 
-    // 1. Load all names from DB
+    //Load all names from DB
     private void loadMedicineNames() {
         try {
             List<MedicineDTO> allMedicines = medicineModel.getAll();
@@ -310,7 +309,7 @@ public class MedicineController {
         }
     }
 
-    // 2. Set up the popup listener
+    // Set up the popup listener
     private void setupAutoSuggestion() {
         ContextMenu suggestionsMenu = new ContextMenu();
 
@@ -321,7 +320,7 @@ public class MedicineController {
                 return;
             }
 
-            // Filter: Find names containing the typed text (Case Insensitive)
+            // Find names containing the typed text (Case Insensitive)
             List<String> matches = allMedicineNames.stream()
                     .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
                     .collect(Collectors.toList());
@@ -337,12 +336,11 @@ public class MedicineController {
             for (String match : matches) {
                 MenuItem item = new MenuItem(match);
 
-                // Action: When user clicks a name
+                //  When user clicks a name
                 item.setOnAction(event -> {
                     txtName.setText(match);
                     suggestionsMenu.hide();
 
-                    // --- AUTO-FILL FORM LOGIC ---
                     try {
                         MedicineDTO medicine = medicineModel.searchByName(match);
                         if (medicine != null) {

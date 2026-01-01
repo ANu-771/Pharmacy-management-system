@@ -41,13 +41,13 @@ public class SupplierController {
     @FXML
     private TableView<SupplierDTO> tblSupplier;
     @FXML
-    private TableColumn<SupplierDTO,Integer> colId;
+    private TableColumn<SupplierDTO, Integer> colId;
     @FXML
-    private TableColumn<SupplierDTO,String> colName;
+    private TableColumn<SupplierDTO, String> colName;
     @FXML
-    private TableColumn<SupplierDTO,String> colEmail;
+    private TableColumn<SupplierDTO, String> colEmail;
     @FXML
-    private TableColumn<SupplierDTO,String> colContact;
+    private TableColumn<SupplierDTO, String> colContact;
 
     SupplierModel supplierModel = new SupplierModel();
     ObservableList<SupplierDTO> supplierList = FXCollections.observableArrayList();
@@ -65,13 +65,11 @@ public class SupplierController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colContact.setCellValueFactory(new PropertyValueFactory<>("contactNum"));
 
-        tblSupplier.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-            if(newValue!=null){
+        tblSupplier.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
                 populateFields(newValue);
             }
         });
-
-
 
     }
 
