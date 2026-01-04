@@ -48,7 +48,6 @@ public class ReportTM {
         this.total = total;
     }
 
-
     @Override
     public String toString() {
         return "ReportTM{" +

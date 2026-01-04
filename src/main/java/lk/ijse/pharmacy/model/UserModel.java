@@ -12,7 +12,6 @@ import java.util.List;
 
 public class UserModel {
 
-    // 1. Get All Users for Table
     public List<UserDTO> getAll() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT * FROM user";
@@ -32,7 +31,6 @@ public class UserModel {
         return userList;
     }
 
-    // 2. Save New User
     public boolean save(UserDTO user, String role) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, ?)";
@@ -46,7 +44,6 @@ public class UserModel {
         return pstm.executeUpdate() > 0;
     }
 
-    // 3. Update User
     public boolean update(UserDTO user, String role) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "UPDATE user SET username = ?, email = ?, password = ?, role = ? WHERE user_id = ?";
@@ -61,7 +58,6 @@ public class UserModel {
         return pstm.executeUpdate() > 0;
     }
 
-    // 4. Delete User
     public boolean delete(String userId) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "DELETE FROM user WHERE user_id = ?";
@@ -71,7 +67,6 @@ public class UserModel {
         return pstm.executeUpdate() > 0;
     }
 
-    // 5. Search User
     public UserDTO search(String id) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT * FROM user WHERE user_id = ?";
@@ -92,17 +87,6 @@ public class UserModel {
         return null;
     }
 
-    // 6. Get Role for a specific User (Helper for Search)
-    public String getRole(String id) throws SQLException {
-        Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "SELECT role FROM user WHERE user_id = ?";
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setString(1, id);
-        ResultSet resultSet = pstm.executeQuery();
-        if (resultSet.next()) return resultSet.getString("role");
-        return null;
-    }
-
     public String checkLogin(String username, String password) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT role FROM user WHERE username = ? AND password = ?";
@@ -114,7 +98,7 @@ public class UserModel {
         if (resultSet.next()) {
             return resultSet.getString("role");
         }
-        return null; // Login Failed
+        return null;
     }
 
     public boolean isUsernameExists(String username) throws SQLException {
@@ -122,6 +106,6 @@ public class UserModel {
         String sql = "SELECT username FROM user WHERE username = ?";
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, username);
-        return pstm.executeQuery().next(); // Returns true if username is found
+        return pstm.executeQuery().next();
     }
 }

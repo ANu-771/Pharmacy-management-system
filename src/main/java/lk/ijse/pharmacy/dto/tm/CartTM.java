@@ -38,20 +38,20 @@ public class CartTM {
         this.description = description;
     }
 
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
     public int getQty() {
         return qty;
     }
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public double getTotal() {

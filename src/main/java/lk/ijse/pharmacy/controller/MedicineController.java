@@ -76,15 +76,12 @@ public class MedicineController {
             if (newVal != null) populateFields(newVal);
         });
 
-        //Restrict Price Input to Numbers & Decimal Only
         txtPrice.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Allows only Digits (0-9) and Dot
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 txtPrice.setText(oldValue);
             }
         });
 
-        // Restrict Quantity to Integers Only
         txtQty.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 txtQty.setText(oldValue);
@@ -191,7 +188,6 @@ public class MedicineController {
             MedicineDTO medicineDTO = null;
 
             try {
-                //Check if ID field is not empty -Search by ID
                 if (!idText.isEmpty()) {
                     if (idText.matches("^\\d+$")) {
                         medicineDTO = medicineModel.search(Integer.parseInt(idText));
@@ -199,18 +195,13 @@ public class MedicineController {
                         new Alert(Alert.AlertType.WARNING, "Invalid ID format!").show();
                         return;
                     }
-                }
-                // If ID is empty,Search by Name
-                else if (!nameText.isEmpty()) {
+                } else if (!nameText.isEmpty()) {
                     medicineDTO = medicineModel.searchByName(nameText);
-                }
-                //If both are empty
-                else {
+                } else {
                     new Alert(Alert.AlertType.WARNING, "Please enter an ID or Name to search!").show();
                     return;
                 }
 
-                //Process Result
                 if (medicineDTO != null) {
                     populateFields(medicineDTO);
                 } else {
@@ -235,20 +226,18 @@ public class MedicineController {
         colQty.setCellValueFactory(new PropertyValueFactory<>("qtyInStock"));
 
 
-        // Highlight Rows based on Expiry Date
         tblMedicine.setRowFactory(tv -> new TableRow<MedicineDTO>() {
             @Override
             protected void updateItem(MedicineDTO item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (item == null || empty || item.getExpDate() == null) {
-                    setStyle(""); // Reset style for empty rows
+                    setStyle("");
                 } else {
-                    // Convert Date to LocalDate
+
                     java.time.LocalDate expDate = new java.sql.Date(item.getExpDate().getTime()).toLocalDate();
                     java.time.LocalDate today = java.time.LocalDate.now();
 
-                    // Check Conditions
                     if (expDate.isBefore(today)) {
                         // Deep Red
                         setStyle("-fx-background-color: #ff9999; -fx-text-background-color: white;");
@@ -273,7 +262,6 @@ public class MedicineController {
             medicineList.clear();
             medicineList.addAll(medicineModel.getAll());
 
-            // Refresh the suggestions list whenever table reloads
             loadMedicineNames();
 
         } catch (SQLException | ClassNotFoundException e) {
@@ -296,7 +284,6 @@ public class MedicineController {
         }
     }
 
-    //Load all names from DB
     private void loadMedicineNames() {
         try {
             List<MedicineDTO> allMedicines = medicineModel.getAll();
@@ -314,29 +301,24 @@ public class MedicineController {
         ContextMenu suggestionsMenu = new ContextMenu();
 
         txtName.textProperty().addListener((observable, oldValue, newValue) -> {
-            // If text is empty, hide menu
             if (newValue == null || newValue.isEmpty()) {
                 suggestionsMenu.hide();
                 return;
             }
 
-            // Find names containing the typed text (Case Insensitive)
             List<String> matches = allMedicineNames.stream()
                     .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
                     .collect(Collectors.toList());
 
-            // If no matches, hide menu
             if (matches.isEmpty()) {
                 suggestionsMenu.hide();
                 return;
             }
 
-            // Add matches to menu
             suggestionsMenu.getItems().clear();
             for (String match : matches) {
                 MenuItem item = new MenuItem(match);
 
-                //  When user clicks a name
                 item.setOnAction(event -> {
                     txtName.setText(match);
                     suggestionsMenu.hide();
@@ -354,13 +336,11 @@ public class MedicineController {
                 suggestionsMenu.getItems().add(item);
             }
 
-            // Show the popup below the Name field
             if (!suggestionsMenu.isShowing()) {
                 suggestionsMenu.show(txtName, Side.BOTTOM, 0, 0);
             }
         });
 
-        // Hide if user clicks away
         txtName.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) suggestionsMenu.hide();
         });

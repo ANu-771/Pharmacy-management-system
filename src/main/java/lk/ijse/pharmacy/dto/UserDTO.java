@@ -27,7 +27,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    // Getters and Setters
     public int getUserId() {
         return userId;
     }

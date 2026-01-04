@@ -26,7 +26,6 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    // Create an instance of the Model to handle DB operations
     private UserModel userModel = new UserModel();
 
     @FXML
@@ -38,11 +37,9 @@ public class LoginController {
         String defaultStyle = "-fx-border-color: #e2e8f0; -fx-border-radius: 5; -fx-background-color: #f8fafc;";
         String errorStyle = "-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 5; -fx-background-color: #fff0f0;";
 
-        // Reset styles initially
         usernameField.setStyle(defaultStyle);
         passwordField.setStyle(defaultStyle);
 
-        // Basic Validation
         if (username.isEmpty()) {
             usernameField.setStyle(errorStyle);
             usernameField.requestFocus();
@@ -55,40 +52,32 @@ public class LoginController {
         }
 
         try {
-            // Check if Username exists ONLY
             boolean isUserFound = userModel.isUsernameExists(username);
 
             if (!isUserFound) {
-                // Red Username Field ONLY
                 usernameField.setStyle(errorStyle);
                 usernameField.requestFocus();
                 new Alert(Alert.AlertType.ERROR, "Username not found!").show();
-                return; // Stop here
+                return;
             }
 
             //Check Password
             String role = userModel.checkLogin(username, password);
 
             if (role != null) {
-                // SUCCESS
                 System.out.println("Login Successful! Role: " + role);
-                //Load the FXML
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/layout.fxml"));
                 Parent root = loader.load();
 
-                //Get the Controller and PASS THE ROLE
                 LayoutController layoutController = loader.getController();
                 layoutController.setRole(role);
 
-                // Show the new screen
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 stage.getScene().setRoot(root);
                 stage.centerOnScreen();
                 stage.show();
 
             } else {
-                // User exists, so Password must be WRONG
-                // Red Password Field
                 passwordField.setStyle(errorStyle);
                 passwordField.requestFocus();
                 new Alert(Alert.AlertType.ERROR, "Incorrect Password!").show();

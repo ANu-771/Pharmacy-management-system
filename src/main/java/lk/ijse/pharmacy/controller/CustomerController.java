@@ -182,8 +182,10 @@ public class CustomerController {
             boolean isUpdated = customerModel.update(customer);
             if (isUpdated) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Updated Successfully!").show();
+
                 loadAllCustomers();
                 clearFields();
+
             } else {
                 new Alert(Alert.AlertType.WARNING, "Customer ID not found!").show();
             }

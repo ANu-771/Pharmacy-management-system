@@ -104,7 +104,6 @@ public class OrderController {
     private OrderModel orderModel = new OrderModel();
     private CustomerModel customerModel = new CustomerModel();
     private MedicineModel medicineModel = new MedicineModel();
-    // List to hold all medicine names for the search
     private List<String> allMedicineNames = new ArrayList<>();
 
     private MedicineDTO selectedMedicine = null;
@@ -419,17 +418,14 @@ public class OrderController {
                 return;
             }
 
-            // Map parameters
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("p_order_id", orderId);
             parameters.put("p_balance", balance);
 
-            // Fill
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
             Connection connection = DBConnection.getInstance().getConnection();
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
 
-            //View the Report (false = don't exit app on close)
             JasperViewer.viewReport(jasperPrint, false);
 
         } catch (Exception e) {
@@ -443,20 +439,16 @@ public class OrderController {
         String name = txtDescription.getText().trim();
 
         try {
-            // Assuming you added searchByName to MedicineModel as discussed
             MedicineDTO medicine = medicineModel.searchByName(name);
 
             if (medicine != null) {
                 selectedMedicine = medicine;
 
-                //  auto-select the ID in the ComboBox
                 cmbMedicineId.setValue(String.valueOf(medicine.getMedicineId()));
 
-                // Fill other details
                 lblUnitPrice.setText(String.valueOf(medicine.getUnitPrice()));
                 lblQtyOnHand.setText(String.valueOf(medicine.getQtyInStock()));
 
-                // Move cursor to Quantity field for quick entry
                 txtQty.requestFocus();
             } else {
                 new Alert(Alert.AlertType.WARNING, "Medicine not found!").show();
@@ -467,29 +459,26 @@ public class OrderController {
     }
 
     private void setupPaymentLogic() {
-        // Populate Payment Methods
         ObservableList<String> methods = FXCollections.observableArrayList("Cash", "Card");
         cmbPaymentMethod.setItems(methods);
-        cmbPaymentMethod.setValue("Cash"); // Default to Cash
+        cmbPaymentMethod.setValue("Cash");
 
-        //  Realtime Balance Calculate
         txtCash.textProperty().addListener((observable, oldValue, newValue) -> {
             calculateBalance();
         });
 
-        // Lock/Unlock fields based on selection
         cmbPaymentMethod.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Card".equals(newValue)) {
-                txtCash.setDisable(true);      // User cannot type
-                lblBalance.setDisable(true);   // Label goes gray
+                txtCash.setDisable(true);
+                lblBalance.setDisable(true);
 
-                txtCash.clear();               // Remove any old numbers
-                lblBalance.setText("0.00");    // Reset balance
+                txtCash.clear();
+                lblBalance.setText("0.00");
             } else {
-                txtCash.setDisable(false);     // Enable typing
-                lblBalance.setDisable(false);  // Enable label
+                txtCash.setDisable(false);
+                lblBalance.setDisable(false);
 
-                txtCash.requestFocus();        // Focus for quick typing
+                txtCash.requestFocus();
             }
         });
     }
@@ -505,7 +494,6 @@ public class OrderController {
 
             lblBalance.setText(String.format("%.2f", balance));
 
-            // Red color if insufficient cash
             if (balance < 0) {
                 lblBalance.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 18;");
             } else {
@@ -517,7 +505,6 @@ public class OrderController {
         }
     }
 
-    // Loads all medicine names into our list
     private void loadMedicineNames() {
         try {
             List<MedicineDTO> allMedicines = medicineModel.getAll();
@@ -530,52 +517,43 @@ public class OrderController {
         }
     }
 
-    // Filter popup
     private void setupAutoSuggestion() {
         ContextMenu suggestionsMenu = new ContextMenu();
 
         txtDescription.textProperty().addListener((observable, oldValue, newValue) -> {
-            // If text is empty, hide the menu
             if (newValue == null || newValue.isEmpty()) {
                 suggestionsMenu.hide();
                 return;
             }
 
-            //  Find names that contain the typed letters (Ignore Case)
             List<String> matches = allMedicineNames.stream()
                     .filter(name -> name.toLowerCase().contains(newValue.toLowerCase()))
                     .collect(Collectors.toList());
 
-            // If no matches, hide menu
             if (matches.isEmpty()) {
                 suggestionsMenu.hide();
                 return;
             }
 
-            // Add matches to the ContextMenu
             suggestionsMenu.getItems().clear();
             for (String match : matches) {
                 MenuItem item = new MenuItem(match);
 
-                //  When user clicks a name from the list
                 item.setOnAction(event -> {
                     txtDescription.setText(match);
                     suggestionsMenu.hide();
 
-                    // Automatically trigger the search to fill Price & Qty
                     txtSearchMedicineOnAction(null);
                 });
 
                 suggestionsMenu.getItems().add(item);
             }
 
-            // Show the menu below the Text Field
             if (!suggestionsMenu.isShowing()) {
                 suggestionsMenu.show(txtDescription, Side.BOTTOM, 0, 0);
             }
         });
 
-        //  Hide menu if user clicks away
         txtDescription.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) suggestionsMenu.hide();
         });

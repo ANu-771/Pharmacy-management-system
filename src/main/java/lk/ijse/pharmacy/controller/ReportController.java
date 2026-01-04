@@ -60,7 +60,6 @@ public class ReportController {
 
     @FXML
     public void initialize() {
-        //Initialize ComboBox
         ObservableList<String> reportTypes = FXCollections.observableArrayList(
                 "Customer Report",
                 "Supplier Report",
@@ -68,13 +67,11 @@ public class ReportController {
         );
         cmbReportType.setItems(reportTypes);
 
-        // Setup Table Columns
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         colCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-        // Load Data
         loadSummaryLabels();
         loadTableData();
 
@@ -95,7 +92,6 @@ public class ReportController {
         try {
             lblTotalSales.setText(String.format("Rs. %.2f", dashboardModel.getTodayIncome()));
 
-            // Call Model instead of SQL
             lblTotalOrders.setText(String.valueOf(reportModel.getTotalOrders()));
             lblItemsSold.setText(String.valueOf(reportModel.getItemsSold()));
 
@@ -106,7 +102,6 @@ public class ReportController {
 
     private void loadTableData() {
         try {
-            // Call Model to get the list
             List<ReportTM> orders = reportModel.getAllOrderDetails();
             tblReportDetails.setItems(FXCollections.observableArrayList(orders));
         } catch (SQLException e) {
@@ -160,7 +155,6 @@ public class ReportController {
 
     private void printBillFromReport(int orderId, double orderTotal) {
         try {
-            // Call Model to get paid amount
             double paidAmount = reportModel.getPaidAmount(orderId);
             double balance = paidAmount - orderTotal;
 

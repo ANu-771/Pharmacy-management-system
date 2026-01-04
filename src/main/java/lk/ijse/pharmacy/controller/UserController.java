@@ -50,7 +50,6 @@ public class UserController {
 
         loadAllUsers();
 
-        // Table Selection
         tblUser.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 populateFields(newValue);
@@ -58,7 +57,6 @@ public class UserController {
         });
     }
 
-    // method to fill fields
     private void populateFields(UserDTO user) {
         txtId.setText(String.valueOf(user.getUserId()));
         txtUsername.setText(user.getUsername());
@@ -84,13 +82,11 @@ public class UserController {
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
-        // Empty Check
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || role == null) {
             new Alert(Alert.AlertType.WARNING, "Please fill all fields!").show();
             return;
         }
 
-        // Regex Validation
         if (!validateUserInput(name, email, password)) {
             return;
         }

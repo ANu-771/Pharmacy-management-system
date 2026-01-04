@@ -55,21 +55,16 @@ public class LayoutController {
         // loadDashboard();
     }
 
-    // Helper Method to Handle Highlighting
     private void setButtonActive(Button activeButton) {
-        // Reset all buttons to default style
         Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnSupply, btnOrder, btnReport, btnUser};
 
         for (Button btn : buttons) {
-            // Remove the active class if it exists
             btn.getStyleClass().remove("nav-btn-active");
-            // Ensure the normal class is there
             if (!btn.getStyleClass().contains("nav-btn")) {
                 btn.getStyleClass().add("nav-btn");
             }
         }
 
-        // Add the active style to the clicked button
         activeButton.getStyleClass().add("nav-btn-active");
     }
 
@@ -123,11 +118,10 @@ public class LayoutController {
 
     @FXML
     private void loadSupply() {
-        setButtonActive(btnSupply); // Highlight the button
+        setButtonActive(btnSupply);
 
         try {
             contentArea.getChildren().clear();
-            // Make sure your file is named 'supply.fxml' in the view folder
             contentArea.getChildren().setAll(App.loadFXML("supply"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,7 +143,6 @@ public class LayoutController {
 
     @FXML
     private void loadReport() {
-        // If role is NOT "admin", show popup and STOP.
         if (!"admin".equalsIgnoreCase(userRole)) {
             new Alert(Alert.AlertType.WARNING, "Access Denied!\nOnly Admin can view Reports.").show();
             return;
@@ -167,7 +160,6 @@ public class LayoutController {
 
     @FXML
     void loadUser() {
-        // If role is NOT "admin", show popup and STOP.
         if (!"admin".equalsIgnoreCase(userRole)) {
             new Alert(Alert.AlertType.WARNING, "Access Denied!\nOnly Admin can manage Users.").show();
             return;
@@ -197,10 +189,7 @@ public class LayoutController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // App.setRoot("login");
             Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
-            // Get the Current Stage
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            // Update the EXISTING scene instead of creating a new one
-            // This prevents the window from resizing or exiting full screen
             stage.getScene().setRoot(root);
         }
     }

@@ -25,14 +25,11 @@ public class SupplyModel {
         return -1;
     }
 
-    // SAVE Supply Record
     public boolean saveSupply(int supplierId, String medName, LocalDate date, int qty, double unitCost, double totalCost) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
 
-        // Check if medicine exists
         int medicineId = getMedicineId(medName);
 
-        // If medicineId is -1, it means medicine does not exist -> Stop and return false
         if (medicineId == -1) {
             return false;
         }
@@ -49,7 +46,6 @@ public class SupplyModel {
         return pstm.executeUpdate() > 0;
     }
 
-    // GET All Records for Table
     public List<SupplyRecordTM> getAllSupplies() throws SQLException {
         List<SupplyRecordTM> list = new ArrayList<>();
         String sql = "SELECT sm.date, sm.supplier_id, s.supplier_name, m.med_name, sm.qty, sm.unit_cost, sm.total_cost " +

@@ -212,7 +212,6 @@ public class SupplyController {
         txtDescription.textProperty().addListener((obs, old, newVal) -> {
             if (newVal == null || newVal.isEmpty()) {
                 menu.hide();
-                // If text cleared, clear ID too
                 cmbMedicineId.getSelectionModel().clearSelection();
                 return;
             }
@@ -226,7 +225,6 @@ public class SupplyController {
                 MenuItem item = new MenuItem(m.getMedName());
                 item.setOnAction(e -> {
                     txtDescription.setText(m.getMedName());
-                    // Auto-Select the ID
                     cmbMedicineId.setValue(String.valueOf(m.getMedicineId()));
                     menu.hide();
                 });
