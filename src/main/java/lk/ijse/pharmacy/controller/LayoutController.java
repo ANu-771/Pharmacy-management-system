@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -20,7 +19,6 @@ public class LayoutController {
 
     @FXML
     private StackPane contentArea;
-
 
     @FXML
     private Button btnCustomer;
@@ -43,6 +41,9 @@ public class LayoutController {
     @FXML
     private Button btnUser;
 
+    @FXML
+    private Button btnSupply;
+
     private String userRole = "user";
 
     public void setRole(String role) {
@@ -57,7 +58,7 @@ public class LayoutController {
     // Helper Method to Handle Highlighting
     private void setButtonActive(Button activeButton) {
         // Reset all buttons to default style
-        Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnOrder, btnReport, btnUser};
+        Button[] buttons = {btnDashboard, btnCustomer, btnMedicine, btnSupplier, btnSupply, btnOrder, btnReport, btnUser};
 
         for (Button btn : buttons) {
             // Remove the active class if it exists
@@ -117,6 +118,20 @@ public class LayoutController {
             contentArea.getChildren().setAll(App.loadFXML("supplier"));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void loadSupply() {
+        setButtonActive(btnSupply); // Highlight the button
+
+        try {
+            contentArea.getChildren().clear();
+            // Make sure your file is named 'supply.fxml' in the view folder
+            contentArea.getChildren().setAll(App.loadFXML("supply"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to load Supply Form!").show();
         }
     }
 

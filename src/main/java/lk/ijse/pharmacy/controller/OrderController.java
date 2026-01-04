@@ -174,6 +174,12 @@ public class OrderController {
     @FXML
     public void cmbCustomerOnAction(ActionEvent actionEvent) {
         String id = cmbCustomerId.getValue();
+
+        if (id == null) {
+            lblCustomerName.setText("");
+            return;
+        }
+
         try {
             CustomerDTO customer = customerModel.search(Integer.parseInt(id));
             if (customer != null) {

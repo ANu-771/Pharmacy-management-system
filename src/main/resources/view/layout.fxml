@@ -46,6 +46,8 @@
 
             <Button fx:id="btnSupplier" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadSupplier" prefHeight="40.0" styleClass="nav-btn" text="Suppliers" />
 
+            <Button fx:id="btnSupply" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadSupply" prefHeight="40.0" styleClass="nav-btn" text="Supply Details" />
+
             <Button fx:id="btnOrder" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadOrder" prefHeight="40.0" styleClass="nav-btn" text="Sales Order" />
 
             <Button fx:id="btnUser" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loadUser" prefHeight="40.0" styleClass="nav-btn" text="User Manage" />
