@@ -125,7 +125,7 @@ public class CustomerController {
             boolean isSaved = customerModel.save(customer);
             if (isSaved) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Saved Successfully!").show();
-                loadAllCustomers(); // Refresh Table
+                loadAllCustomers();
                 clearFields();
             }
         } catch (SQLException | ClassNotFoundException e) {
