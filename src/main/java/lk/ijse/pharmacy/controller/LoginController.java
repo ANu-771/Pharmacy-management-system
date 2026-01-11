@@ -93,21 +93,19 @@ public class LoginController {
 
     @FXML
     void linkForgotPasswordOnAction(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Password Reset");
-        alert.setHeaderText("Contact Administrator");
-        alert.setContentText("Please contact the Shop Owner or the Software Company Administrator to reset your password.");
-
         try {
-            Image image = new Image(getClass().getResourceAsStream("/image/pw locked.png"));
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(50);
-            imageView.setFitWidth(50);
-            alert.setGraphic(imageView);
-        } catch (Exception e) {
-            System.out.println("Icon image not found: " + e.getMessage());
-        }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/forgot_password.fxml"));
+            Parent root = loader.load();
 
-        alert.showAndWait();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Forgot Password");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Could not load Forgot Password form.").show();
+        }
     }
 }

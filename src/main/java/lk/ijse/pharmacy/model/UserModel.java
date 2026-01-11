@@ -108,4 +108,24 @@ public class UserModel {
         pstm.setString(1, username);
         return pstm.executeQuery().next();
     }
+
+    public UserDTO getUserByEmail(String email) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "SELECT * FROM user WHERE email = ?";
+
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, email);
+        ResultSet resultSet = pstm.executeQuery();
+
+        if (resultSet.next()) {
+            return new UserDTO(
+                    resultSet.getInt("user_id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    resultSet.getString("role")
+            );
+        }
+        return null;
+    }
 }

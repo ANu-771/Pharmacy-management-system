@@ -7,6 +7,7 @@ module lk.ijse.pharmacy {
     requires java.sql;
     requires java.desktop;
     requires net.sf.jasperreports.core;
+    requires java.mail;
 
 
     opens lk.ijse.pharmacy to javafx.fxml;
@@ -17,5 +18,6 @@ module lk.ijse.pharmacy {
     exports lk.ijse.pharmacy.dto;
     opens lk.ijse.pharmacy.dto.tm to javafx.base;
     exports lk.ijse.pharmacy.dto.tm;
+    exports lk.ijse.pharmacy.util;
 
 }

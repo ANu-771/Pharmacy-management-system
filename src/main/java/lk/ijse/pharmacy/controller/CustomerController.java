@@ -101,7 +101,7 @@ public class CustomerController {
         }
 
     }
-
+    //save
     @FXML
     private void btnSaveOnAction(ActionEvent event) {
         int id = 0;
@@ -122,7 +122,7 @@ public class CustomerController {
         CustomerDTO customer = new CustomerDTO(id, name, contact, address);
 
         try {
-            boolean isSaved = customerModel.save(customer);
+            boolean isSaved = customerModel.save(customer); //cAll the model
             if (isSaved) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Saved Successfully!").show();
                 loadAllCustomers();
