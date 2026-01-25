@@ -11,7 +11,7 @@ import javafx.scene.input.KeyEvent;
 import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.dto.CustomerDTO;
 import lk.ijse.pharmacy.model.CustomerModel;
-
+import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.sql.*;
 
@@ -133,6 +133,33 @@ public class CustomerController {
         }
     }
 
+//    @FXML
+//    void btnDeleteOnAction(ActionEvent event) {
+//        String id = txtId.getText().trim() == null ? "" : txtId.getText().trim();
+//
+//        if (id.isEmpty()) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter an ID to delete").show();
+//            return;
+//        }
+//        if (!id.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+//            return;
+//        }
+//
+//        try {
+//            boolean isDeleted = customerModel.delete(Integer.parseInt(id));
+//            if (isDeleted) {
+//                new Alert(Alert.AlertType.INFORMATION, "Customer Deleted Successfully!").show();
+//                loadAllCustomers();
+//                clearFields();
+//            } else {
+//                new Alert(Alert.AlertType.WARNING, "Customer ID not found!").show();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText().trim() == null ? "" : txtId.getText().trim();
@@ -146,8 +173,14 @@ public class CustomerController {
             return;
         }
 
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Deletion",
+                "Are you sure you want to delete this customer?",
+                "delete-alert");
+
+        if (!confirmed) return; // Stop if Cancel is clicked
+
         try {
-            boolean isDeleted = customerModel.delete(Integer.parseInt(id));
+            boolean isDeleted = customerModel.delete(Integer.parseInt(id)); //
             if (isDeleted) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Deleted Successfully!").show();
                 loadAllCustomers();
@@ -160,14 +193,49 @@ public class CustomerController {
         }
     }
 
+//    @FXML
+//    void btnUpdateOnAction(ActionEvent event) {
+//        String id = txtId.getText() == null ? "" : txtId.getText().trim();
+//        String name = txtName.getText().trim();
+//        String contact = txtContact.getText().trim();
+//        String address = txtAddress.getText().trim();
+//
+//        if (!id.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+//            return;
+//        }
+//
+//        if (!validateCustomerInput(name, contact, address)) {
+//            return;
+//        }
+//
+//        CustomerDTO customer = new CustomerDTO(Integer.parseInt(id), name, contact, address);
+//
+//        try {
+//            boolean isUpdated = customerModel.update(customer);
+//            if (isUpdated) {
+//                new Alert(Alert.AlertType.INFORMATION, "Customer Updated Successfully!").show();
+//
+//                loadAllCustomers();
+//                clearFields();
+//
+//            } else {
+//                new Alert(Alert.AlertType.WARNING, "Customer ID not found!").show();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtId.getText() == null ? "" : txtId.getText().trim();
-        String name = txtName.getText().trim();
-        String contact = txtContact.getText().trim();
-        String address = txtAddress.getText().trim();
+        String idText = txtId.getText() == null ? "" : txtId.getText().trim();
+        String name = txtName.getText() == null ? "" : txtName.getText().trim();
+        String contact = txtContact.getText() == null ? "" : txtContact.getText().trim();
+        String address = txtAddress.getText() == null ? "" : txtAddress.getText().trim();
 
-        if (!id.matches("^\\d+$")) {
+        if (!idText.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
             return;
         }
@@ -176,16 +244,20 @@ public class CustomerController {
             return;
         }
 
-        CustomerDTO customer = new CustomerDTO(Integer.parseInt(id), name, contact, address);
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Update",
+                "Are you sure you want to update this customer's details?",
+                "update-alert");
+
+        if (!confirmed) return; // Stop if Cancel is clicked
+
+        CustomerDTO customer = new CustomerDTO(Integer.parseInt(idText), name, contact, address);
 
         try {
             boolean isUpdated = customerModel.update(customer);
             if (isUpdated) {
                 new Alert(Alert.AlertType.INFORMATION, "Customer Updated Successfully!").show();
-
                 loadAllCustomers();
                 clearFields();
-
             } else {
                 new Alert(Alert.AlertType.WARNING, "Customer ID not found!").show();
             }
@@ -193,6 +265,7 @@ public class CustomerController {
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
         }
     }
+
 
     private void loadAllCustomers() {
         try {
@@ -221,6 +294,8 @@ public class CustomerController {
 
         return true;
     }
+
+
 
     @FXML
     void btnResetOnAction(ActionEvent event) {

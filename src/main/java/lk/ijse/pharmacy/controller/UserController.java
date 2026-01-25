@@ -106,6 +106,43 @@ public class UserController {
         }
     }
 
+//    @FXML
+//    void btnUpdateOnAction(ActionEvent event) {
+//        String idText = txtId.getText().trim();
+//
+//        // ID Validation
+//        if (idText.isEmpty() || !idText.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter a valid User ID!").show();
+//            return;
+//        }
+//
+//        int id = Integer.parseInt(idText);
+//        String name = txtUsername.getText().trim();
+//        String email = txtEmail.getText().trim();
+//        String password = txtPassword.getText();
+//        String role = cmbRole.getValue();
+//
+//        // Regex Validation Check
+//        if (!validateUserInput(name, email, password)) {
+//            return;
+//        }
+//
+//        UserDTO user = new UserDTO(id, name, email, password);
+//
+//        try {
+//            if (userModel.update(user, role)) {
+//                new Alert(Alert.AlertType.INFORMATION, "User Updated!").show();
+//                btnClearOnAction(event);
+//                loadAllUsers();
+//            } else {
+//                new Alert(Alert.AlertType.ERROR, "Update Failed. ID may not exist.").show();
+//            }
+//        } catch (SQLException e) {
+//            new Alert(Alert.AlertType.ERROR, "SQL Error: " + e.getMessage()).show();
+//        }
+//    }
+
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String idText = txtId.getText().trim();
@@ -127,10 +164,16 @@ public class UserController {
             return;
         }
 
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Update",
+                "Are you sure you want to update this user details?",
+                "update-alert");
+
+        if (!confirmed) return;
+
         UserDTO user = new UserDTO(id, name, email, password);
 
         try {
-            if (userModel.update(user, role)) {
+            if (userModel.update(user, role)) { //
                 new Alert(Alert.AlertType.INFORMATION, "User Updated!").show();
                 btnClearOnAction(event);
                 loadAllUsers();
@@ -142,6 +185,31 @@ public class UserController {
         }
     }
 
+
+//    @FXML
+//    void btnDeleteOnAction(ActionEvent event) {
+//        String id = txtId.getText().trim();
+//
+//        // ID Validation
+//        if (id.isEmpty() || !id.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Enter a valid User ID to delete").show();
+//            return;
+//        }
+//
+//        try {
+//            if (userModel.delete(id)) {
+//                new Alert(Alert.AlertType.INFORMATION, "User Deleted!").show();
+//                btnClearOnAction(event);
+//                loadAllUsers();
+//            } else {
+//                new Alert(Alert.AlertType.ERROR, "Delete Failed. User Not Found.").show();
+//            }
+//        } catch (SQLException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
+
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText().trim();
@@ -152,8 +220,14 @@ public class UserController {
             return;
         }
 
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Deletion",
+                "Are you sure you want to delete this user?",
+                "delete-alert");
+
+        if (!confirmed) return;
+
         try {
-            if (userModel.delete(id)) {
+            if (userModel.delete(id)) { //
                 new Alert(Alert.AlertType.INFORMATION, "User Deleted!").show();
                 btnClearOnAction(event);
                 loadAllUsers();

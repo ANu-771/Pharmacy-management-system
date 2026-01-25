@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lk.ijse.pharmacy.dto.MedicineDTO;
@@ -121,6 +122,45 @@ public class MedicineController {
         }
     }
 
+//    @FXML
+//    void btnUpdateOnAction(ActionEvent event) {
+//        String idText = txtId.getText().trim();
+//        if (idText.isEmpty()) {
+//            new Alert(Alert.AlertType.WARNING, "Select a medicine to update!").show();
+//            return;
+//        }
+//
+//        String name = txtName.getText().trim();
+//        String brand = txtBrand.getText().trim();
+//        String priceText = txtPrice.getText().trim();
+//        String qtyText = txtQty.getText().trim();
+//        LocalDate localExpDate = dpExpDate.getValue();
+//
+//        if (name.isEmpty() || brand.isEmpty() || priceText.isEmpty() || qtyText.isEmpty() || localExpDate == null) {
+//            new Alert(Alert.AlertType.WARNING, "Please fill all fields!").show();
+//            return;
+//        }
+//
+//        if (!validateInput(priceText, qtyText)) return;
+//
+//        int id = Integer.parseInt(idText);
+//        double price = Double.parseDouble(priceText);
+//        int qty = Integer.parseInt(qtyText);
+//        Date expDate = Date.from(localExpDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//
+//        MedicineDTO medicine = new MedicineDTO(id, name, brand, qty, price, expDate);
+//
+//        try {
+//            if (medicineModel.update(medicine)) {
+//                new Alert(Alert.AlertType.INFORMATION, "Updated Successfully!").show();
+//                loadAllMedicines();
+//                clearFields();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String idText = txtId.getText().trim();
@@ -142,6 +182,12 @@ public class MedicineController {
 
         if (!validateInput(priceText, qtyText)) return;
 
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Update",
+                "Are you sure you want to update this record?",
+                "update-alert");
+
+        if (!confirmed) return;
+
         int id = Integer.parseInt(idText);
         double price = Double.parseDouble(priceText);
         int qty = Integer.parseInt(qtyText);
@@ -160,6 +206,24 @@ public class MedicineController {
         }
     }
 
+//    @FXML
+//    void btnDeleteOnAction(ActionEvent event) {
+//        String idText = txtId.getText().trim();
+//        if (idText.isEmpty()) {
+//            new Alert(Alert.AlertType.WARNING, "Select a medicine to delete!").show();
+//            return;
+//        }
+//        try {
+//            if (medicineModel.delete(Integer.parseInt(idText))) {
+//                new Alert(Alert.AlertType.INFORMATION, "Deleted Successfully!").show();
+//                loadAllMedicines();
+//                clearFields();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String idText = txtId.getText().trim();
@@ -167,8 +231,15 @@ public class MedicineController {
             new Alert(Alert.AlertType.WARNING, "Select a medicine to delete!").show();
             return;
         }
+
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Deletion",
+                "Are you sure you want to delete this medicine?",
+                "delete-alert");
+
+        if (!confirmed) return;
+
         try {
-            if (medicineModel.delete(Integer.parseInt(idText))) {
+            if (medicineModel.delete(Integer.parseInt(idText))) { //
                 new Alert(Alert.AlertType.INFORMATION, "Deleted Successfully!").show();
                 loadAllMedicines();
                 clearFields();
@@ -177,7 +248,6 @@ public class MedicineController {
             new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
         }
     }
-
 
     @FXML
     private void handlePressEnter(KeyEvent event) {
@@ -345,6 +415,7 @@ public class MedicineController {
             if (!newVal) suggestionsMenu.hide();
         });
     }
+
 
     @FXML
     void btnClearOnAction(ActionEvent event) {

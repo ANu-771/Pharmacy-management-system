@@ -76,3 +76,59 @@
     -fx-background-color: #1d4ed8; /* Even Darker Blue */
     -fx-effect: none;
 }
+
+/* The main container of the alert */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* The header text (e.g., "Confirm Deletion") */
+.dialog-pane > .header-panel {
+    -fx-background-color: #f3f4f6; /* Light gray header */
+    -fx-padding: 10px;
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+/* The content text (e.g., "Are you sure...?") */
+.dialog-pane > .content.label {
+    -fx-text-fill: #555555;
+    -fx-padding: 10px;
+}
+
+/* ALL Buttons inside the alert */
+.dialog-pane .button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: black;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 15px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+/* --- SPECIFIC STYLES FOR DANGER ACTIONS (DELETE) --- */
+.delete-alert .button-bar > .container > .button:default {
+    -fx-background-color: #dc3545; /* Red */
+    -fx-text-fill: white;
+}
+.delete-alert .button-bar > .container > .button:default:hover {
+    -fx-background-color: #c82333; /* Darker Red */
+}
+
+/* --- SPECIFIC STYLES FOR UPDATE ACTIONS --- */
+.update-alert .button-bar > .container > .button:default {
+    -fx-background-color: #0d6efd; /* Blue */
+    -fx-text-fill: white;
+}
+.update-alert .button-bar > .container > .button:default:hover {
+    -fx-background-color: #0b5ed7; /* Darker Blue */
+}

@@ -133,6 +133,34 @@ public class SupplierController {
         }
     }
 
+//    @FXML
+//    void btnDeleteOnAction(ActionEvent event) {
+//        String id = txtId.getText().trim() == null ? "" : txtId.getText().trim();
+//
+//        if (id.isEmpty()) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter an ID to delete").show();
+//            return;
+//        }
+//        if (!id.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+//            return;
+//        }
+//
+//        try {
+//            boolean isDeleted = supplierModel.delete(Integer.parseInt(id));
+//            if (isDeleted) {
+//                new Alert(Alert.AlertType.INFORMATION, "Supplier Deleted Successfully!").show();
+//                loadAllSuppliers();
+//                clearFields();
+//            } else {
+//                new Alert(Alert.AlertType.WARNING, "Supplier ID not found!").show();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
+
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText().trim() == null ? "" : txtId.getText().trim();
@@ -145,6 +173,12 @@ public class SupplierController {
             new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
             return;
         }
+
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Deletion",
+                "Are you sure you want to delete this supplier?",
+                "delete-alert");
+
+        if (!confirmed) return;
 
         try {
             boolean isDeleted = supplierModel.delete(Integer.parseInt(id));
@@ -160,13 +194,48 @@ public class SupplierController {
         }
     }
 
+
+//    @FXML
+//    void btnUpdateOnAction(ActionEvent event) {
+//        String id = txtId.getText() == null ? "" : txtId.getText().trim();
+//        String name = txtName.getText();
+//        String contact = txtContact.getText();
+//        String email = txtEmail.getText();
+//
+//        if (!id.matches("^\\d+$")) {
+//            new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
+//            return;
+//        }
+//
+//        if (!validateSupplierInput(name, contact, email)) {
+//            return;
+//        }
+//
+//        SupplierDTO supplier = new SupplierDTO(Integer.parseInt(id), name, email, contact);
+//
+//        try {
+//            boolean isUpdated = supplierModel.update(supplier);
+//            if (isUpdated) {
+//                new Alert(Alert.AlertType.INFORMATION, "Supplier Updated Successfully!").show();
+//                loadAllSuppliers();
+//                clearFields();
+//            } else {
+//                new Alert(Alert.AlertType.WARNING, "Supplier ID not found!").show();
+//            }
+//        } catch (SQLException | ClassNotFoundException e) {
+//            new Alert(Alert.AlertType.ERROR, "Error: " + e.getMessage()).show();
+//        }
+//    }
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
+        // 1. Get Data
         String id = txtId.getText() == null ? "" : txtId.getText().trim();
         String name = txtName.getText();
         String contact = txtContact.getText();
         String email = txtEmail.getText();
 
+        // 2. Validate
         if (!id.matches("^\\d+$")) {
             new Alert(Alert.AlertType.WARNING, "Please enter a valid ID!").show();
             return;
@@ -176,10 +245,16 @@ public class SupplierController {
             return;
         }
 
+        boolean confirmed = lk.ijse.pharmacy.util.AlertUtil.showConfirmation("Confirm Update",
+                "Are you sure you want to update this supplier's details?",
+                "update-alert");
+
+        if (!confirmed) return;
+
         SupplierDTO supplier = new SupplierDTO(Integer.parseInt(id), name, email, contact);
 
         try {
-            boolean isUpdated = supplierModel.update(supplier);
+            boolean isUpdated = supplierModel.update(supplier); //
             if (isUpdated) {
                 new Alert(Alert.AlertType.INFORMATION, "Supplier Updated Successfully!").show();
                 loadAllSuppliers();
