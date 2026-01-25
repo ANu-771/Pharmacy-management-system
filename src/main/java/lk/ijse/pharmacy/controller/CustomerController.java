@@ -12,6 +12,7 @@ import lk.ijse.pharmacy.dbconnection.DBConnection;
 import lk.ijse.pharmacy.dto.CustomerDTO;
 import lk.ijse.pharmacy.model.CustomerModel;
 import javafx.scene.image.ImageView;
+
 import java.io.IOException;
 import java.sql.*;
 
@@ -101,6 +102,7 @@ public class CustomerController {
         }
 
     }
+
     //save
     @FXML
     private void btnSaveOnAction(ActionEvent event) {
@@ -118,6 +120,15 @@ public class CustomerController {
         if (!validateCustomerInput(name, contact, address)) {
             return;
         }
+
+        // Loop through the existing list to see if this contact already exists
+        for (CustomerDTO customer : customerList) {
+            if (customer.getContact().equals(contact)) {
+                new Alert(Alert.AlertType.WARNING, "A customer with this Contact Number already exists!").show();
+                return; // Stop the save process
+            }
+        }
+
 
         CustomerDTO customer = new CustomerDTO(id, name, contact, address);
 
@@ -287,14 +298,13 @@ public class CustomerController {
             return false;
         }
 
-        if (!address.matches("^.{3,}$")) {
-            new Alert(Alert.AlertType.ERROR, "Invalid Address! Must be more than 2 characters.").show();
+        if (!address.matches("^[a-zA-Z0-9\\s]{3,}$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Address! Use only letters, numbers, and spaces.").show();
             return false;
         }
 
         return true;
     }
-
 
 
     @FXML

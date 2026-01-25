@@ -119,6 +119,17 @@ public class SupplierController {
             return;
         }
 
+        for (SupplierDTO s : supplierList) {
+            if (s.getContactNum().equals(contact)) {
+                new Alert(Alert.AlertType.WARNING, "A supplier with this Contact Number already exists!").show();
+                return;
+            }
+            if (s.getEmail().equalsIgnoreCase(email)) {
+                new Alert(Alert.AlertType.WARNING, "A supplier with this Email already exists!").show();
+                return;
+            }
+        }
+
         SupplierDTO supplier = new SupplierDTO(id, name, email, contact);
 
         try {
