@@ -136,12 +136,12 @@ src/
 ![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/0ed0b1f97f9d8768c14bba5a3fe0df2c8326e873/src/main/resources/screenshots/Screenshot%202026-01-06%20052535.png)
 
 ```
-
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/0ed0b1f97f9d8768c14bba5a3fe0df2c8326e873/src/main/resources/screenshots/Screenshot%202026-01-06%20052535.png)
 ### Dashboard
 ```text
 Add Screenshot Here
 ```
-
+![Login Screen Screenshot](https://github.com/AnU-771/Pharmacy-management-system/raw/main/path/to/image.png)
 ### Medicine Management
 ```text
 Add Screenshot Here
