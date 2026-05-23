@@ -133,7 +133,7 @@ src/
 
 ### Login Screen
 ```text
-<img width="1920" height="1020" alt="Screenshot 2026-01-06 052535" src="https://github.com/user-attachments/assets/49d29619-5cc4-4383-b042-50d36f80d990" />
+<img width="1920" height="1020" alt="Screenshot 2026-01-06 052535" src="src/main/resources/screenshots/Screenshot 2026-01-06 052535.png" />
 
 ```
 
