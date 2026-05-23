@@ -133,7 +133,7 @@ src/
 
 ### Login Screen
 ```text
-<img width="1920" height="1020" alt="Screenshot 2026-01-06 052535" src="src/main/resources/screenshots/Screenshot 2026-01-06 052535.png" />
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/0ed0b1f97f9d8768c14bba5a3fe0df2c8326e873/src/main/resources/screenshots/Screenshot%202026-01-06%20052535.png)
 
 ```
 
