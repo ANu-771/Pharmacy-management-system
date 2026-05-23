@@ -132,30 +132,33 @@ src/
 ## 📸 Screenshots
 
 ### Login Screen
-```text
+
 ![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/0ed0b1f97f9d8768c14bba5a3fe0df2c8326e873/src/main/resources/screenshots/Screenshot%202026-01-06%20052535.png)
 
-```
-![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/0ed0b1f97f9d8768c14bba5a3fe0df2c8326e873/src/main/resources/screenshots/Screenshot%202026-01-06%20052535.png)
+---
+
 ### Dashboard
-```text
-Add Screenshot Here
-```
-![Login Screen Screenshot](https://github.com/AnU-771/Pharmacy-management-system/raw/main/path/to/image.png)
+
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/c6b2aa8f373f3eace0ce60ef1ed048c8aa56e266/src/main/resources/screenshots/Screenshot%202026-01-06%20053116.png)
+
+---
+
 ### Medicine Management
-```text
-Add Screenshot Here
-```
+
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/c6b2aa8f373f3eace0ce60ef1ed048c8aa56e266/src/main/resources/screenshots/Screenshot%202026-01-06%20053950.png)
+
+---
 
 ### Supplier Management
-```text
-Add Screenshot Here
-```
+
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/c6b2aa8f373f3eace0ce60ef1ed048c8aa56e266/src/main/resources/screenshots/Screenshot%202026-01-06%20054255.png)
+
+---
 
 ### Billing System
-```text
-Add Screenshot Here
-```
+
+![image alt](https://github.com/ANu-771/Pharmacy-management-system/blob/c6b2aa8f373f3eace0ce60ef1ed048c8aa56e266/src/main/resources/screenshots/Screenshot%202026-01-06%20054723.png)
+
 
 ---
 
@@ -202,11 +205,7 @@ This project demonstrates:
 
 ---
 
-## 👨‍💻 Developed By
-
-**ISURU ANUPAMA**
-
-GitHub: https://github.com/ANu-771
+Developed by [ISURU ANUPAMA](https://github.com/ANu-771)
 
 ---
 
